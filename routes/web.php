@@ -13,11 +13,27 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::redirect('/', '/admin/home');
+
+Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
+    Route::get('login', 'AuthController@showLoginForm')->name('admin.login');
+    Route::post('login', 'AuthController@login');
+    Route::get('logout', 'AuthController@logout')->name('admin.logout');
 });
 
-Route::get('/admin/dashboard', function () {
-    return view('admin.dashboard');
-});
+// Protected Admin Routes
+Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
+    ->middleware('auth:admin')
+    ->group(function () {
+        Route::get('/home', 'HomeController@index');
+
+        // Admin
+        Route::resource('admins', 'AdminController');
+
+        Route::get('/getAdmin', 'AdminController@getAdmin')->name('admin.getAdmin');
+    });
+
+// Route::get('/admin/dashboard', function () {
+//     return view('admin.dashboard');
+// });
 // Route::view('dashboard', 'dashboard');

@@ -40,6 +40,17 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'api' => [
+            'driver' => 'token',
+            'provider' => 'users',
+            'hash' => false,
+        ],
+    
+        'admin' => [ // Add this configuration for the admin guard
+            'driver' => 'session',
+            'provider' => 'admins', // You need to define 'admins' provider in 'providers' array as well
+        ],
     ],
 
     /*
@@ -65,10 +76,10 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        'admins' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Admin::class,
+        ],
     ],
 
     /*
