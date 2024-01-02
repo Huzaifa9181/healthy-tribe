@@ -24,6 +24,8 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
     Route::get('/profile/notification/{status}', [AuthenticateController::class , 'notification']);    
     Route::get('/profile/languages', [AuthenticateController::class , 'languages']);    
     Route::post('/forgotpassword', [AuthenticateController::class , 'forgotPassword']);    
+    Route::post('/verifyPin', [AuthenticateController::class , 'verifyPin']);    
+    Route::post('/passwordChanged', [AuthenticateController::class , 'passwordChanged']);    
     Route::get('/', function (Request $request) {
         return response()->json(['data' => Auth::guard('sanctum')->user()], 200);
     });

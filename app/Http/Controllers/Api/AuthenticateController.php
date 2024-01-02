@@ -193,19 +193,21 @@ class AuthenticateController extends Controller
             return response()->json($validator->errors(), 422);
         }
         
-        // Generate a 4 digit pin
-        $pin = rand(1000, 9999);
+        // Generate a 5 digit pin
+        $pin = rand(10000, 99999);
         $email = $request->email;
         $token = Str::random(60);
         $expiresAt = Carbon::now()->addSeconds(60);
 
         // Store token and pin in the password_resets table or your custom table
-        DB::table('password_reset')->insert([
-            'email' => $email,
-            'pin' => $pin, // Store the PIN
-            'expires_at' => $expiresAt,
-            'created_at' => now(), // Store the current timestamp
-        ]);
+        DB::table('password_reset')->updateOrInsert(
+            ['email' => $email],
+            [
+                'pin' => $pin, // Store the PIN
+                'expires_at' => $expiresAt,
+                'created_at' => now(), // Store the current timestamp
+            ]
+        );
 
         try {
             Mail::send('emails.pin', ['pin' => $pin], function ($message) use ($email) {
@@ -216,25 +218,51 @@ class AuthenticateController extends Controller
             return response()->json(['message' => 'Failed to send the PIN. Please try again.'], 500);
         }
         
-        return response()->json(['message' => 'PIN sent to your email.', 'expires_in' => 60]);   
+        return response()->json(['message' => 'PIN sent to your email.', 'expires_in' => 60],200);   
     }
 
     public function verifyPin(Request $request)
     {
         $request->validate([
             'email' => 'required|email|exists:users,email',
-            'pin' => 'required|numeric|digits:4'
+            'pin' => 'required|numeric|digits:5'
         ]);
         $email = $request->email;
         $pin = $request->pin;
-        $record = DB::table('password_reset_tokens')->where('email', $email)->first();
+        $record = DB::table('password_reset')->where('email', $email)->first();
         if ($record && $record->pin == $pin) {
             if ($record->expires_at > Carbon::now()) {
-                return response()->json(['message' => 'PIN is valid.'], 200);
+                $user = User::where('email' , $email)->first();
+                return response()->json(['message' => 'PIN is valid.' , 'user_id' => $user->id], 200);
             } else {
                 return response()->json(['message' => 'PIN has expired.'], 401);
             }
         }
         return response()->json(['message' => 'Invalid PIN.'], 401);
+    }
+
+    public function passwordChanged(Request $request)
+    {
+        // Validation rules
+        $validator = Validator::make($request->all(), [
+            'password' => 'required|min:8', // Adjust the password rules as needed
+            'confirm_password' => 'required|same:password',
+            'user_id' => 'required',
+        ]);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Get the authenticated user
+        $user = User::find($request->user_id);
+
+        // Update the user's password with the hashed value
+        $user->update([
+            'password' => Hash::make($request->input('password')),
+        ]);
+
+        return response()->json(['message' => 'Password changed successfully'], 200);
     }
 }
