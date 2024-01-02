@@ -16,6 +16,7 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
+use App\Services\TwilioService;
 
 class AuthenticateController extends Controller
 {
@@ -264,5 +265,22 @@ class AuthenticateController extends Controller
         ]);
 
         return response()->json(['message' => 'Password changed successfully'], 200);
+    }
+
+    public function sendTextMessage(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'phone_number' => 'required', // Adjust the password rules as needed
+        ]);
+
+        // Check if validation fails
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+        $twilio = new TwilioService();
+        
+        $pin = rand(10000, 99999);
+        $twilio->sendSMS($request->phone_number, 'Your otp is : '.$pin);
+        return response()->json(['message' => 'otp send successfully'],200);
     }
 }
