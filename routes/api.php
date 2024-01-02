@@ -1,7 +1,10 @@
 <?php
 
+use App\Http\Controllers\Api\AuthenticateController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\ApiAuthenticate;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,6 +17,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+
+Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
+    Route::post('/profile/create', [AuthenticateController::class , 'profile']);    
+    Route::post('/profile/update', [AuthenticateController::class , 'profile_update']);    
+    Route::get('/profile/notification/{status}', [AuthenticateController::class , 'notification']);    
+    Route::get('/profile/languages', [AuthenticateController::class , 'languages']);    
+    Route::post('/forgotpassword', [AuthenticateController::class , 'forgotPassword']);    
+    Route::get('/', function (Request $request) {
+        return response()->json(['data' => Auth::guard('sanctum')->user()], 200);
+    });
 });
+
+Route::post('/user/login', [AuthenticateController::class , 'login']);
+Route::post('/user/signup', [AuthenticateController::class , 'signup']);
