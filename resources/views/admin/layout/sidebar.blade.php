@@ -35,15 +35,27 @@
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-tachometer-alt"></i>
               <p>
-                Admin
+                Web Users
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
             <ul class="nav nav-treeview">
               <li class="nav-item">
-                <a href="{{ route('admins.index') }}" class="nav-link">
+                <a href="{{ route('admin.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Admin</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Trainer</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('admin.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>User</p>
                 </a>
               </li>
             </ul>

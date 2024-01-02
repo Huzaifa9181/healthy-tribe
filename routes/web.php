@@ -13,7 +13,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::redirect('/', '/admin/home');
+Route::redirect('/', url('/admin/login'));
 
 Route::prefix('admin')->namespace('App\Http\Controllers\Admin')->group(function () {
     Route::get('login', 'AuthController@showLoginForm')->name('admin.login');
@@ -29,8 +29,13 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
 
         // Admin
         Route::resource('admins', 'AdminController');
-
+        Route::get('/admins/{id}/edit', 'AdminController@edit')->name('admin.edit');
+        Route::post('/admins/update/{id}', 'AdminController@update')->name('admin.update');
         Route::get('/getAdmin', 'AdminController@getAdmin')->name('admin.getAdmin');
+        Route::get('/admins', 'AdminController@index')->name('admin.index');
+
+        //Users
+        Route::resource('users', 'UserController');
     });
 
 // Route::get('/admin/dashboard', function () {

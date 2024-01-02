@@ -46,7 +46,12 @@ return [
             'provider' => 'users',
             'hash' => false,
         ],
-    
+
+        'users' => [
+            'driver' => 'session',
+            'provider' => 'users',
+        ],
+
         'admin' => [ // Add this configuration for the admin guard
             'driver' => 'session',
             'provider' => 'admins', // You need to define 'admins' provider in 'providers' array as well
@@ -78,7 +83,7 @@ return [
 
         'admins' => [
             'driver' => 'eloquent',
-            'model' => App\Models\Admin::class,
+            'model' => App\Models\User::class,
         ],
     ],
 
