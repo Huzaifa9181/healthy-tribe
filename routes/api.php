@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Api\AuthenticateController;
+use App\Http\Controllers\Api\WorkoutController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ApiAuthenticate;
@@ -19,14 +20,25 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
-    Route::post('/profile/create', [AuthenticateController::class , 'profile']);    
-    Route::post('/profile/update', [AuthenticateController::class , 'profile_update']);    
-    Route::get('/profile/notification/{status}', [AuthenticateController::class , 'notification']);    
-    Route::get('/profile/languages', [AuthenticateController::class , 'languages']);    
-    Route::post('/forgotpassword', [AuthenticateController::class , 'forgotPassword']);    
-    Route::post('/verifyPin', [AuthenticateController::class , 'verifyPin']);    
-    Route::post('/passwordChanged', [AuthenticateController::class , 'passwordChanged']);    
-    Route::post('/sendTextMessage', [AuthenticateController::class , 'sendTextMessage']);    
+    Route::controller(AuthenticateController::class)->group(function () {
+        Route::post('/profile/create', 'profile');
+        Route::post('/profile/update', 'profile_update');
+        Route::get('/profile/notification/{status}', 'notification');
+        Route::get('/profile/languages', 'languages');
+        Route::post('/forgotpassword', 'forgotPassword');
+        Route::post('/verifyPin', 'verifyPin');
+        Route::post('/passwordChanged', 'passwordChanged');
+        Route::post('/sendTextMessage', 'sendTextMessage');
+    });
+
+    Route::controller(WorkoutController::class)->group(function () {
+        Route::get('/trainers', 'getTrainers');
+        Route::get('/categories', 'getCategories');
+        Route::get('/plans', 'getPlans');
+        Route::get('/plans/{id}', 'getPlan');
+        Route::get('/videos', 'getVideos');
+    });
+
     Route::get('/', function (Request $request) {
         return response()->json(['data' => Auth::guard('sanctum')->user()], 200);
     });

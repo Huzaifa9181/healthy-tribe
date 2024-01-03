@@ -221,19 +221,41 @@ class AuthenticateController extends Controller
         
         return response()->json(['message' => 'PIN sent to your email.', 'expires_in' => 60],200);   
     }
+    
 
     public function verifyPin(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email|exists:users,email',
+        $validator = Validator::make($request->all(), [
             'pin' => 'required|numeric|digits:5'
         ]);
-        $email = $request->email;
+
         $pin = $request->pin;
-        $record = DB::table('password_reset')->where('email', $email)->first();
+        if($request->email){
+            $validator->addRules([
+                'email' => 'required|email|exists:users,email',
+            ]);
+        
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
+            $email = $request->email;
+            $record = DB::table('password_reset')->where('email', $email)->first();
+            $user = User::where('email' , $email)->first();
+        }elseif($request->phone_number){
+            $validator->addRules([
+                'phone_number' => 'required|integer',
+            ]);
+        
+            if ($validator->fails()) {
+                return response()->json($validator->errors(), 422);
+            }
+            $phone_number = $request->phone_number;
+            $record = DB::table('password_reset')->where('phone_number', $phone_number)->first();
+            $user = User::where('phone_number' , $phone_number)->first();
+        }
+        
         if ($record && $record->pin == $pin) {
             if ($record->expires_at > Carbon::now()) {
-                $user = User::where('email' , $email)->first();
                 return response()->json(['message' => 'PIN is valid.' , 'user_id' => $user->id], 200);
             } else {
                 return response()->json(['message' => 'PIN has expired.'], 401);
@@ -270,16 +292,29 @@ class AuthenticateController extends Controller
     public function sendTextMessage(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'phone_number' => 'required', // Adjust the password rules as needed
+            'phone_number' => 'required|exists:users,phone_number', // Adjust the phone number rules as needed
         ]);
 
         // Check if validation fails
         if ($validator->fails()) {
             return response()->json(['errors' => $validator->errors()], 422);
         }
+
         $twilio = new TwilioService();
         
         $pin = rand(10000, 99999);
+        $expiresAt = Carbon::now()->addSeconds(60);
+
+        // Store token and pin in the password_resets table or your custom table
+        DB::table('password_reset')->updateOrInsert(
+            ['phone_number' => $request->phone_number],
+            [
+                'pin' => $pin, // Store the PIN
+                'expires_at' => $expiresAt,
+                'created_at' => now(), // Store the current timestamp
+            ]
+        );
+
         $twilio->sendSMS($request->phone_number, 'Your otp is : '.$pin);
         return response()->json(['message' => 'otp send successfully'],200);
     }
