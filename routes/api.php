@@ -33,9 +33,11 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
 
     Route::controller(WorkoutController::class)->group(function () {
         Route::get('/trainers', 'getTrainers');
+        Route::get('/trainers/video', 'getTainerVideo');
         Route::get('/categories', 'getCategories');
         Route::get('/plans', 'getPlans');
         Route::get('/plans/{id}', 'getPlan');
+        Route::get('/FetchAllPlans', 'FetchAllPlans');
         Route::get('/videos', 'getVideos');
     });
 

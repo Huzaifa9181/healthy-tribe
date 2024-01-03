@@ -92,7 +92,7 @@ class AuthenticateController extends Controller
             'height' => 'required',
             'age' => 'required|integer',
             'sleep_quality' => 'required',
-            'goal' => 'required',
+            'favourite_trainer' => 'required',
         ]);
     
         if ($validator->fails()) {
@@ -107,6 +107,7 @@ class AuthenticateController extends Controller
         $user->age = $request->age;
         $user->sleep_quality = $request->sleep_quality;
         $user->goal = $request->goal;
+        $user->favourite_trainer = $request->favourite_trainer;
         $user->update();
         return response()->json(['message' => 'Profile Created Successfully'], 200); // Return a success response with the access token
     }

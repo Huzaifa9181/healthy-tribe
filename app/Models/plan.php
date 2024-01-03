@@ -11,6 +11,6 @@ class plan extends Model
 
     public function videos()
     {
-        return $this->hasMany(video::class);
+        return $this->hasMany(video::class , 'plan_id');
     }
 }

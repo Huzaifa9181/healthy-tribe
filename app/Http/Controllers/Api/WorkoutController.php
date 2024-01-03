@@ -33,6 +33,37 @@ class WorkoutController extends Controller
         return response()->json(['data' => $categorie],200);
     }
 
+    public function FetchAllPlans(){
+        $user = Auth::guard('sanctum')->user();
+        $lastWorkout = Workout::where('user_id', $user->id)->latest('id')->first();
+        $plan = plan::find($lastWorkout->plan_id);
+        if($plan) {
+            $plans = plan::where('category_id' , $plan->category_id)->get();
+            $data = [];
+            foreach($plans as $val){
+                $val->locked = $this->checkLocked($val->id,$user->id);
+                $data[] = $val;
+            }
+            return $data;
+            
+        } else {
+            $nextPlan = plan::where('user_id' , $user->favourite_trainer)->get();
+        }
+        return response()->json(['data' => $nextPlan],200);
+    }
+
+    private function checkLocked($plan_id , $user_id){
+        $lastWorkout = Workout::where('user_id', $user_id)->where('plan_id', $plan_id)->count();
+        if($lastWorkout > 0){
+            $lastWorkout = 'Unlocked';
+        }else{
+            $lastWorkout = 'Locked';
+        }
+        return $lastWorkout;
+    }
+
+
+
     public function getPlans(){
         $user = Auth::guard('sanctum')->user();
         $lastWorkout = Workout::where('user_id', $user->id)->latest('id')->first();
@@ -78,7 +109,11 @@ class WorkoutController extends Controller
     public function getPlan($id){
         $plan = Plan::find($id);
         $video = $plan->videos;
-        return response()->json(['data' => $plan , 'video' => $video],200);
+        return response()->json(['data' => $plan ],200);
+    }
 
+    public function getTainerVideo(){
+        $trainer_video = User::with('videos')->where('role_id' , 2)->first();
+        return response()->json(['data' => $trainer_video],200);
     }
 }
