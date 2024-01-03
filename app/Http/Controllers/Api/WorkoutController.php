@@ -116,4 +116,9 @@ class WorkoutController extends Controller
         $trainer_video = User::with('videos')->where('role_id' , 2)->first();
         return response()->json(['data' => $trainer_video],200);
     }
+
+    public function getSpecificVideos($id){
+        $video = video::find($id);
+        return response()->json(['data' => $video],200);
+    }
 }

@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\Auth;
 
 Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
     Route::controller(AuthenticateController::class)->group(function () {
+        Route::post('/profileUpdate', 'profileUpdate');
         Route::post('/profile/create', 'profile');
         Route::post('/profile/update', 'profile_update');
         Route::get('/profile/notification/{status}', 'notification');
@@ -39,6 +40,7 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/plans/{id}', 'getPlan');
         Route::get('/FetchAllPlans', 'FetchAllPlans');
         Route::get('/videos', 'getVideos');
+        Route::get('/videos/{id}', 'getSpecificVideos');
     });
 
     Route::get('/', function (Request $request) {

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Models\achievement;
 use App\Models\language;
 use App\Models\notification;
 use Illuminate\Http\Request;
@@ -318,5 +319,24 @@ class AuthenticateController extends Controller
 
         $twilio->sendSMS($request->phone_number, 'Your otp is : '.$pin);
         return response()->json(['message' => 'otp send successfully'],200);
+    }
+
+    public function profileUpdate(Request $request){
+        $validator = Validator::make($request->all(), [
+            'goal' => 'required|string|max:173',
+            'about' => 'required|string|max:188',
+            'achievement' => 'required|string|max:255',
+        ]);
+    
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+        $user = Auth::guard('sanctum')->user();
+        $user = User::find($user->id);
+        $user->goal = $request->goal;
+        $user->about = $request->about;
+        $user->achievement = $request->achievement;
+        $user->update();
+        return response()->json(['message' => 'Profile Updated Successfully.'],200);
     }
 }
