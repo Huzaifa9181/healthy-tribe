@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('addiction_recoveries', function (Blueprint $table) {
             $table->id();
-            $table->string('user_id');
+            $table->string('how_long');
             $table->unsignedBigInteger('addiction_id');
             $table->unsignedBigInteger('user_id');
             $table->timestamps();
