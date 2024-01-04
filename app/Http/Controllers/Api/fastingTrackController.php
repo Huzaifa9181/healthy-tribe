@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use App\Traits\HandleResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
+use Carbon\Carbon;
 
 class fastingTrackController extends Controller
 {
@@ -95,5 +96,59 @@ class fastingTrackController extends Controller
     public function fetchAllChallenges(){
         $challenge = challenge::all();
         return $this->successWithData($challenge , 'Successfully Fetch All Challenges.');
+    }
+
+    public function milestone(){
+        $user = Auth::guard('sanctum')->user();
+        $count = fasting_track::where( 'user_id' ,$user->id)->count();
+        return $this->successWithData($count , 'Successfully Get Milestone.');
+    }
+
+    public function calender($id = null){
+        $user = Auth::guard('sanctum')->user();
+        if($id){
+            $records = fasting_track::select('start_time', 'end_time', 'created_at')
+            ->find($id);
+            $dateString = $records->created_at;
+            $date = Carbon::parse($dateString);
+
+            $dayName = $date->format('l'); // 'l' format gives the full day name
+            $dateString2 = $records->updated_at;
+            $date2 = Carbon::parse($dateString2);
+
+            $dayName2 = $date2->format('l'); // 'l' format gives the full day name
+
+            $start =  $dayName.', ' .$records->start_time ?? '';
+            $end =  $dayName2.', ' .$records->end_time ?? '';
+            $response['started_fasting'] = $start;
+            $response['goal_reached'] = $end;
+            // $records->start_time;
+            // $records->end_time;
+        }else{
+            $records = fasting_track::select('start_time', 'end_time', 'created_at')
+                ->where('user_id', $user->id)
+                ->get();
+            
+            $response = [];
+            
+            foreach ($records as $val) {
+                $recordData = [
+                    'hours' => $this->getHourDifference($val->start_time, $val->end_time),
+                    'date' => $val->created_at,
+                ];
+                $response[] = $recordData;
+            }
+        }
+        
+        return $this->successWithData($response , 'Successfully Fetch Calender Details.');
+
+    }
+
+    private function getHourDifference($intal_time , $final_time){
+        $start_time = Carbon::parse($intal_time);
+        $end_time = Carbon::parse($final_time);
+
+        // Calculate the difference in hours
+        return $hours_difference = $start_time->diffInHours($end_time);
     }
 }

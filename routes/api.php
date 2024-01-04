@@ -50,6 +50,7 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('/fasting/track_start', 'fasting_track_start');
         Route::post('/fasting/track_end', 'fasting_track_end');
         Route::get('/fasting/milestone', 'milestone');
+        Route::get('/fasting/calender/{id?}', 'calender');
         Route::get('/challenges', 'fetchAllChallenges');
     });
 
