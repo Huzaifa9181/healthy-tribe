@@ -10,20 +10,20 @@
           <!-- jquery validation -->
           <div class="card card-primary">
             <div class="card-header">
-              <h3 class="card-title">Create User Details</h3>
+              <h3 class="card-title">Update User Details</h3>
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form action="{{ route('users.store') }}" id="createProfileForm" method="POST">
+            <form action="{{ route('users.update') }}" id="createProfileForm" method="POST">
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
                     <label for="exampleInputName">Name</label>
-                    <input type="text" name="name" class="form-control" id="exampleInputName" placeholder="Enter first name">
+                    <input type="text" name="name" class="form-control" id="exampleInputName" value="{{$data->name ?? ''}}" placeholder="Enter first name" required>
                   </div>
                   <div class="form-group">
                     <label for="exampleInputEmail">Email address</label>
-                    <input type="email" name="email" class="form-control" id="exampleInputEmail" placeholder="Enter email">
+                    <input type="email" name="email" class="form-control" id="exampleInputEmail" placeholder="Enter email" required value="{{$data->email ?? ''}}">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPassword">Password</label>
@@ -31,32 +31,40 @@
                   </div>
                   <div class="form-group">
                     <label for="exampleInputPhoneNumber">Phone Number</label>
-                    <input type="number" name="phone_number" class="form-control" id="exampleInputPhoneNumber" placeholder="Enter phone number">
+                    <input type="number" name="phone_number" class="form-control" id="exampleInputPhoneNumber" placeholder="Enter phone number" required value="{{$data->phone_number ?? ''}}">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputDOB">Date of Birth</label>
-                    <input type="date" name="dob" class="form-control" id="exampleInputDOB" placeholder="Enter DOB">
+                    <input type="date" name="dob" class="form-control" id="exampleInputDOB" placeholder="Enter DOB" value="{{$data->dob ?? ''}}" required>
                   </div>
                   <div class="form-group">
                     <label for="exampleInputCountry">Country</label>
-                    <input type="text" name="country" class="form-control" id="exampleInputCountry">
+                    <input type="text" name="country" class="form-control" id="exampleInputCountry" value="{{$data->country ?? ''}}" required>
                   </div>
                   <div class="form-group">
                     <label for="exampleInputCountry">State</label>
-                    <input type="text" name="state" class="form-control" id="exampleInputCountry">
+                    <input type="text" name="state" class="form-control" id="exampleInputCountry" value="{{$data->state ?? ''}}" required>
                   </div>
+                  <?php $roles = ['2' => 'Trainer' , '3' => 'User']; ?>
+                  <input type="hidden" name="id" value="{{$data->id}}">
                   <div class="form-group">
                     <label for="exampleInputCountry">Role</label>
                     <select name="role_id" class="form-control">
                       <option value="" >--Select Role--</option>
-                      <option value="2">Trainer</option>
-                      <option value="3">User</option>
+                      @foreach ($roles as $key => $val)
+                        @if ($key === $data->role_id)
+                          <option value="{{$key}}" selected>{{$val}}</option>  
+                        @else
+                          <option value="{{$key}}" >{{$val}}</option>  
+                        @endif
+                        
+                      @endforeach
                     </select>
                   </div>
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">
-                  <button type="submit" class="btn btn-primary">Create</button>
+                  <button type="submit" class="btn btn-primary">Update</button>
                 </div>
             </form>
 

@@ -39,6 +39,9 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         Route::get('/getUsers', 'UserController@getUsers')->name('users.getUsers');
         Route::get('/users', 'UserController@index')->name('users.index');
         Route::get('/users/create', 'UserController@create')->name('users.create');
+        Route::get('/users/edit/{id}', 'UserController@edit')->name('users.edit');
+        Route::post('/users/store', 'UserController@store')->name('users.store');
+        Route::post('/users/update', 'UserController@update')->name('users.update');
         Route::post('/users/destroy', 'UserController@destroy')->name('users.destroy');
     });
 

@@ -1,6 +1,6 @@
 @extends('admin.layout.layout')
 @section('content')
-
+@section('title' , $title)
 <!-- Main content -->
 <section class="content">
     <div class="container-fluid">
