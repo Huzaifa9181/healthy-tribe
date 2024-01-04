@@ -10,10 +10,13 @@ use App\Models\video;
 use App\Models\workout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Traits\HandleResponse;
 
 class WorkoutController extends Controller
 {
     //
+    use HandleResponse;
+
     public function getTrainers(){
         // Retrieve a unique collection of user IDs from the plans
         $uniquePlanUserIds = Plan::pluck('user_id')->unique();
@@ -25,12 +28,14 @@ class WorkoutController extends Controller
                     ->limit(10)  // Limiting the results to 10
                     ->get();  // Getting the collective
 
-        return response()->json(['data' => $trainers],200);
+        return $this->successWithData($trainers , 'Successfully Fetch 10 Trainers');
     }
 
     public function getCategories(){
-        $categorie = categorie::all();
-        return response()->json(['data' => $categorie],200);
+        $categorie = categorie::latest()  // Ordering by the latest first
+        ->limit(10)  // Limiting the results to 10
+        ->get();  // Getting the collective;
+        return $this->successWithData($categorie , 'Successfully Fetch 10 Categories');
     }
 
     public function FetchAllPlans(){
@@ -38,18 +43,16 @@ class WorkoutController extends Controller
         $lastWorkout = Workout::where('user_id', $user->id)->latest('id')->first();
         $plan = plan::find($lastWorkout->plan_id);
         if($plan) {
-            $plans = plan::where('category_id' , $plan->category_id)->get();
+            $plans = plan::where('user_id' , $plan->user_id)->get();
             $data = [];
             foreach($plans as $val){
                 $val->locked = $this->checkLocked($val->id,$user->id);
                 $data[] = $val;
             }
-            return $data;
             
-        } else {
-            $nextPlan = plan::where('user_id' , $user->favourite_trainer)->get();
-        }
-        return response()->json(['data' => $nextPlan],200);
+        } 
+
+        return $this->successWithData($data , 'Successfully Fetch PLans');
     }
 
     private function checkLocked($plan_id , $user_id){
@@ -70,14 +73,15 @@ class WorkoutController extends Controller
 
         if($lastWorkout) {
             // Retrieve the next plan based on the plan_id from the last workout
-            $nextPlan = Plan::where('user_id', $lastWorkout->user_id)
+            $nextPlan = Plan::with('videos')->where('user_id', $lastWorkout->user_id)
                             ->where('id', '>', $lastWorkout->plan_id)
                             ->orderBy('id', 'asc') // Assuming plans are ordered by ID
                             ->first(); // Get the next record
         } else {
-            $nextPlan = plan::where('user_id' , $user->favourite_trainer)->first();
+            $nextPlan = plan::with('videos')->where('user_id' , $user->favourite_trainer)->first();
         }
-        return response()->json(['data' => $nextPlan],200);
+
+        return $this->successWithData($nextPlan , 'Successfully Fetch PLans');
     }
 
     public function getVideos(){
@@ -103,22 +107,22 @@ class WorkoutController extends Controller
             ->limit(10)  // Limiting the results to 10
             ->get();
         }
-        return response()->json(['data' => $video],200);
+
+        return $this->successWithData($video , 'Successfully Fetch 10 Videos');
     }
 
     public function getPlan($id){
-        $plan = Plan::find($id);
-        $video = $plan->videos;
-        return response()->json(['data' => $plan ],200);
+        $plan = Plan::with('videos')->find($id);
+        return $this->successWithData($plan , 'Successfully Fetch Plan And Videos');
     }
 
     public function getTainerVideo(){
         $trainer_video = User::with('videos')->where('role_id' , 2)->first();
-        return response()->json(['data' => $trainer_video],200);
+        return $this->successWithData($trainer_video , 'Successfully Fetch Trainer Videos');
     }
 
     public function getSpecificVideos($id){
         $video = video::find($id);
-        return response()->json(['data' => $video],200);
+        return $this->successWithData($video , 'Successfully Fetch Specific Video');
     }
 }

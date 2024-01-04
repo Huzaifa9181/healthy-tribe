@@ -18,14 +18,24 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use Carbon\Carbon;
 use App\Services\TwilioService;
-
+use App\Traits\HandleResponse;
 class AuthenticateController extends Controller
 {
+    use HandleResponse;
     //
     public function login(Request $request)
     {
-        $credentials = $request->only(['email', 'password']);
+        $validator = Validator::make($request->all(), [
+            'email' => 'required|email|exists:users,email',
+            'password' => ['required'],
+        ]);
+    
+        if ($validator->fails()) {
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+        }
 
+        $credentials = $request->only(['email', 'password']);
+        
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
@@ -33,11 +43,11 @@ class AuthenticateController extends Controller
             if ($user->role_id === 3) {
                 $token = $user->createToken('MyApp')->plainTextToken;
                 $user= User::where('email' , $request->email)->update(['remember_token' => $token]);
-                return response()->json(['access_token' => $token], 200);
+                return $this->successWithData($token , "access token" , 200 );
             }
         }
 
-        return response()->json(['message' => 'Unauthorized'], 401);
+        return $this->badRequestResponse( "Invalid credentials" );
     }
 
     public function signup(Request $request)
@@ -58,7 +68,7 @@ class AuthenticateController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
     
         // Create a new user
@@ -83,7 +93,7 @@ class AuthenticateController extends Controller
         // Generate an access token for the user
         $token = $user->createToken('MyApp')->plainTextToken;
     
-        return response()->json(['access_token' => $token], 200); // Return a success response with the access token
+        return $this->successWithData($token , "access token" , 200 );
     }
 
     public function profile(Request $request){
@@ -97,7 +107,7 @@ class AuthenticateController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
 
         $user = Auth::guard('sanctum')->user();
@@ -110,7 +120,7 @@ class AuthenticateController extends Controller
         $user->goal = $request->goal;
         $user->favourite_trainer = $request->favourite_trainer;
         $user->update();
-        return response()->json(['message' => 'Profile Created Successfully'], 200); // Return a success response with the access token
+        return $this->successMessage('Profile Created Successfully');
     }
 
     public function profile_update(Request $request){
@@ -139,15 +149,23 @@ class AuthenticateController extends Controller
             ]);
         
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return $this->fail( 422 ,"Invalid credentials", $validator->errors());
             }
 
-            $imagePath = $request->file('image')->store('images', 'public');
-            $user->image = $imagePath;    
+            $image = $request->file('image');
+            
+            // Generate a unique filename
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            
+            // Store the file in the public folder
+            $image->move(public_path('assets/profile_images'), $filename);
+
+            // Set the relative image path in the meal model
+            $user->image = 'assets/profile_images/' . $filename;
         }
 
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
 
         $user->name = $request->name;
@@ -160,12 +178,12 @@ class AuthenticateController extends Controller
         $user->age = $request->age;
         $user->update();
 
-        return response()->json(['message' => 'Profile Updated Successfully'], 200); // Return a success response with the access token
+        return $this->successMessage('Profile Updated Successfully');
     }
 
     public function languages(){
         $data = language::all();
-        return response()->json(['data' => $data], 200); // Return a success response with the access token
+        return $this->successWithData($data , 'All Language Fetch');
     }
 
     public function notification($status){
@@ -178,7 +196,7 @@ class AuthenticateController extends Controller
         }else{
             $data = notification::where('user_id' , $user->id)->get();
         }
-        return response()->json(['data' => $data], 200); // Return a success response with the access token
+        return $this->successWithData($data , 'Notifications Fetch');
     }
 
     protected function validateEmail(Request $request)
@@ -193,7 +211,7 @@ class AuthenticateController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
         
         // Generate a 5 digit pin
@@ -218,10 +236,11 @@ class AuthenticateController extends Controller
             });
         } catch (\Exception $e) {
             // Handle the exception or log it
-            return response()->json(['message' => 'Failed to send the PIN. Please try again.'], 500);
+            return $this->fail( 500 ,"Internal Server Error", 'Failed to send the PIN. Please try again.');
         }
-        
-        return response()->json(['message' => 'PIN sent to your email.', 'expires_in' => 60],200);   
+
+        $data = ['expires_in' => 60];
+        return $this->successWithData($data , 'PIN sent to your email.');
     }
     
 
@@ -238,7 +257,7 @@ class AuthenticateController extends Controller
             ]);
         
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return $this->fail( 422 ,"Invalid credentials", $validator->errors());
             }
             $email = $request->email;
             $record = DB::table('password_reset')->where('email', $email)->first();
@@ -249,7 +268,7 @@ class AuthenticateController extends Controller
             ]);
         
             if ($validator->fails()) {
-                return response()->json($validator->errors(), 422);
+                return $this->fail( 422 ,"Invalid credentials", $validator->errors());
             }
             $phone_number = $request->phone_number;
             $record = DB::table('password_reset')->where('phone_number', $phone_number)->first();
@@ -258,12 +277,13 @@ class AuthenticateController extends Controller
         
         if ($record && $record->pin == $pin) {
             if ($record->expires_at > Carbon::now()) {
-                return response()->json(['message' => 'PIN is valid.' , 'user_id' => $user->id], 200);
+                $data = ['user_id' => $user->id];
+                return $this->successWithData($data , 'PIN is valid.');
             } else {
-                return response()->json(['message' => 'PIN has expired.'], 401);
+                return $this->badRequestResponse('PIN has expired.');
             }
         }
-        return response()->json(['message' => 'Invalid PIN.'], 401);
+        return $this->badRequestResponse('Invalid PIN.');
     }
 
     public function passwordChanged(Request $request)
@@ -277,7 +297,7 @@ class AuthenticateController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
 
         // Get the authenticated user
@@ -288,7 +308,7 @@ class AuthenticateController extends Controller
             'password' => Hash::make($request->input('password')),
         ]);
 
-        return response()->json(['message' => 'Password changed successfully'], 200);
+        return $this->successMessage('Password changed successfully');
     }
 
     public function sendTextMessage(Request $request)
@@ -299,7 +319,7 @@ class AuthenticateController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
 
         $twilio = new TwilioService();
@@ -318,7 +338,7 @@ class AuthenticateController extends Controller
         );
 
         $twilio->sendSMS($request->phone_number, 'Your otp is : '.$pin);
-        return response()->json(['message' => 'otp send successfully'],200);
+        return $this->successMessage('otp send successfully');
     }
 
     public function profileUpdate(Request $request){
@@ -329,7 +349,7 @@ class AuthenticateController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return response()->json($validator->errors(), 422);
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
         $user = Auth::guard('sanctum')->user();
         $user = User::find($user->id);
@@ -337,6 +357,6 @@ class AuthenticateController extends Controller
         $user->about = $request->about;
         $user->achievement = $request->achievement;
         $user->update();
-        return response()->json(['message' => 'Profile Updated Successfully.'],200);
+        return $this->successMessage('Profile Updated Successfully.');
     }
 }

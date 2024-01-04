@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthenticateController;
 use App\Http\Controllers\Api\WorkoutController;
+use App\Http\Controllers\Api\fastingTrackController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ApiAuthenticate;
@@ -41,6 +42,15 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/FetchAllPlans', 'FetchAllPlans');
         Route::get('/videos', 'getVideos');
         Route::get('/videos/{id}', 'getSpecificVideos');
+    });
+
+    Route::controller(fastingTrackController::class)->group(function () {
+        Route::get('/article', 'article');
+        Route::post('/fasting/track_description', 'fasting_track_description');
+        Route::post('/fasting/track_start', 'fasting_track_start');
+        Route::post('/fasting/track_end', 'fasting_track_end');
+        Route::get('/fasting/milestone', 'milestone');
+        Route::get('/challenges', 'fetchAllChallenges');
     });
 
     Route::get('/', function (Request $request) {
