@@ -45,20 +45,14 @@
 
     @section('script')
     <script>
-        $(document).ready(function () {
-            $('#data_table').DataTable({
-                processing: true,
-                serverSide: true,
-                ajax: "{{ route('admin.getAdmin') }}", // Replace with the actual route
-                columns: [
-                    { data: 'id', name: 'id' }, // Replace 'column1' with your actual column names
-                    { data: 'name', name: 'name' },
-                    { data: 'email', name: 'email' },
-                    { data: 'action', name: 'action', orderable: false, searchable: false },
-                ]
-            });
-        });
-    </script>
+      var adminColumns = [
+        { data: 'id', name: 'id' }, // Replace 'column1' with your actual column names
+        { data: 'name', name: 'name' },
+        { data: 'email', name: 'email' },
+        { data: 'action', name: 'action', orderable: false, searchable: false },
+      ];
+      initializeDataTable("{{ route('admin.getAdmin') }}", adminColumns);
+  </script> 
     @endsection
 
   @endsection

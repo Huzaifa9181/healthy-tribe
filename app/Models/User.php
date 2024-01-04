@@ -21,7 +21,6 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'phone_number',
     ];
 
     /**
@@ -47,6 +46,11 @@ class User extends Authenticatable
     public function videos()
     {
         return $this->hasMany(video::class , 'trainer_id' );
+    }
+
+    public function getImageLinkAttribute()
+    {
+        return $this->image ? asset('public/' . $this->image) : null;
     }
 
 }

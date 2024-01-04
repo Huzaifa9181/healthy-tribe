@@ -36,6 +36,10 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
 
         //Users
         Route::resource('users', 'UserController');
+        Route::get('/getUsers', 'UserController@getUsers')->name('users.getUsers');
+        Route::get('/users', 'UserController@index')->name('users.index');
+        Route::get('/users/create', 'UserController@create')->name('users.create');
+        Route::post('/users/destroy', 'UserController@destroy')->name('users.destroy');
     });
 
 // Route::get('/admin/dashboard', function () {

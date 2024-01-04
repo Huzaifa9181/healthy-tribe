@@ -22,7 +22,7 @@ class AdminController extends Controller
     public function getAdmin(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::where('id', 1)->get(); // Replace 'YourModel' with your actual model name
+            $data = User::where('id', 1)->where('role_id', 1)->get(); // Replace 'YourModel' with your actual model name
 
             return DataTables::of($data)
                 ->addColumn('action', function ($row) {

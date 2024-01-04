@@ -45,6 +45,8 @@
 <script src="{{url('public/admin/dist/js/demo.js')}}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{url('public/admin/dist/js/pages/dashboard2.js')}}"></script>
+<!-- Custom js -->
+@include('admin.ajax')
 
 @yield('script')
 
