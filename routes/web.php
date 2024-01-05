@@ -43,6 +43,21 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         Route::post('/users/store', 'UserController@store')->name('users.store');
         Route::post('/users/update', 'UserController@update')->name('users.update');
         Route::post('/users/destroy', 'UserController@destroy')->name('users.destroy');
+
+        //Subscription
+        Route::resource('subscription', 'SubscriptionController');
+        Route::get('/getSubscription', 'SubscriptionController@getSubscription')->name('subscription.getSubscription');
+        Route::get('/subscription', 'SubscriptionController@index')->name('subscription.index');
+        Route::get('/subscription/create', 'SubscriptionController@create')->name('subscription.create');
+        Route::get('/subscription/edit/{id}', 'SubscriptionController@edit')->name('subscription.edit');
+        Route::post('/subscription/store', 'SubscriptionController@store')->name('subscription.store');
+        Route::post('/subscription/update', 'SubscriptionController@update')->name('subscription.update');
+        Route::post('/subscription/destroy', 'SubscriptionController@destroy')->name('subscription.destroy');
+
+        //Users
+        Route::resource('content', 'ContentController');
+        Route::get('/content', 'ContentController@index')->name('content.index');
+        Route::post('/content/update', 'ContentController@update')->name('content.update');
     });
 
 // Route::get('/admin/dashboard', function () {

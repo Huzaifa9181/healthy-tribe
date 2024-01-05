@@ -40,11 +40,17 @@
 <script src="{{ url('public/admin/plugins/jquery-mapael/maps/usa_states.min.js') }}"></script>
 <!-- ChartJS -->
 <script src="{{ url('public/admin/plugins/chart.js/Chart.min.js') }}"></script>
-
-<!-- AdminLTE for demo purposes -->
-<script src="{{ url('public/admin/dist/js/demo.js') }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <script src="{{ url('public/admin/dist/js/pages/dashboard2.js') }}"></script>
+<!-- Summernote -->
+<script src="{{ url('public/admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
+<!-- CodeMirror -->
+<script src="{{ url('public/admin/plugins/codemirror/codemirror.js') }}"></script>
+<script src="{{ url('public/admin/plugins/codemirror/mode/css/css.js') }}"></script>
+<script src="{{ url('public/admin/plugins/codemirror/mode/xml/xml.js') }}"></script>
+<script src="{{ url('public/admin/plugins/codemirror/mode/htmlmixed/htmlmixed.js') }}"></script>
+<!-- AdminLTE for demo purposes -->
+<script src="{{ url('public/admin/dist/js/demo.js') }}"></script>
 <!-- Custom js -->
 @include('admin.ajax')
 

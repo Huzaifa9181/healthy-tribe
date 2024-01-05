@@ -13,4 +13,9 @@
   <link rel="stylesheet" href="{{url('public/admin/plugins/overlayScrollbars/css/OverlayScrollbars.min.css')}}">
   <!-- Theme style -->
   <link rel="stylesheet" href="{{url('public/admin/dist/css/adminlte.min.css')}}">
+  <!-- summernote -->
+  <link rel="stylesheet" href="{{url('public/admin/plugins/summernote/summernote-bs4.min.css')}}">
+  <!-- CodeMirror -->
+  <link rel="stylesheet" href="{{url('public/admin/plugins/codemirror/codemirror.css')}}">
+  <link rel="stylesheet" href="{{url('public/admin/plugins/codemirror/theme/monokai.css')}}">
 </head>
