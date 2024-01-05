@@ -48,6 +48,12 @@ class User extends Authenticatable
         return $this->hasMany(video::class , 'trainer_id' );
     }
 
+    public function role()
+    {
+        return $this->belongsTo(Role::class, 'role_id');
+    }
+
+
     public function getImageLinkAttribute()
     {
         return $this->image ? asset('public/' . $this->image) : null;

@@ -39,11 +39,15 @@
                   </div>
                   <div class="form-group">
                     <label for="exampleInputCountry">Country</label>
-                    <input type="text" name="country" class="form-control" id="exampleInputCountry" value="{{$data->country ?? ''}}" required>
+                    <input type="text" name="country" class="form-control" id="exampleInputCountry" value="{{$data->country ?? ''}}">
                   </div>
                   <div class="form-group">
                     <label for="exampleInputCountry">State</label>
-                    <input type="text" name="state" class="form-control" id="exampleInputCountry" value="{{$data->state ?? ''}}" required>
+                    <input type="text" name="state" class="form-control" id="exampleInputCountry" value="{{$data->state ?? ''}}">
+                  </div>
+                  <div class="form-group">
+                    <label for="exampleInputCity">City</label>
+                    <input type="text" name="city" class="form-control" id="exampleInputCity" value="{{$data->city ?? ''}}">
                   </div>
                   <?php $roles = ['2' => 'Trainer' , '3' => 'User']; ?>
                   <input type="hidden" name="id" value="{{$data->id}}">

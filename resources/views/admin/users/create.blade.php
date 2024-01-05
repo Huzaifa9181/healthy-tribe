@@ -46,6 +46,10 @@
                     <input type="text" name="state" class="form-control" id="exampleInputCountry">
                   </div>
                   <div class="form-group">
+                    <label for="exampleInputCity">City</label>
+                    <input type="text" name="city" class="form-control" id="exampleInputCity">
+                  </div>
+                  <div class="form-group">
                     <label for="exampleInputCountry">Role</label>
                     <select name="role_id" class="form-control">
                       <option value="" >--Select Role--</option>

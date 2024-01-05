@@ -7,7 +7,10 @@
                 processing: true,
                 serverSide: true,
                 ajax: ajaxRoute, // Replace with the actual route
-                columns: columnsConfig
+                columns: columnsConfig,
+                initComplete: function () {
+                    //console.log(this.api().ajax.json()); // Log the response data
+                }
             });
         });
     }

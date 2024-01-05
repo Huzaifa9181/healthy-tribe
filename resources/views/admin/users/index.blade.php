@@ -22,9 +22,9 @@
                   <th>Country</th>
                   <th>State</th>
                   <th>City</th>
-                  <th>College</th>
-                  <th>Occupation</th>
-                  <th>Image</th>
+                  {{-- <th>College</th> --}}
+                  {{-- <th>Occupation</th> --}}
+                  {{-- <th>Image</th> --}}
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -40,9 +40,9 @@
                     <th>Country</th>
                     <th>State</th>
                     <th>City</th>
-                    <th>College</th>
-                    <th>Occupation</th>
-                    <th>Image</th>
+                    {{-- <th>College</th> --}}
+                    {{-- <th>Occupation</th> --}}
+                    {{-- <th>Image</th> --}}
                     <th>Action</th>
                 </tr>
                 </tfoot>
@@ -64,15 +64,15 @@
         var userColumns = [
             { data: 'id', name: 'id' }, // Replace 'column1' with your actual column names
             { data: 'name', name: 'name' },
-            { data: 'role_id', name: 'role_id' },
+            { data: 'role.name', name: 'role_name' },
             { data: 'email', name: 'email' },
             { data: 'phone_number', name: 'phone_number' },
             { data: 'country', name: 'country' },
             { data: 'state', name: 'state' },
             { data: 'city', name: 'city' },
-            { data: 'institution_attended', name: 'institution_attended' },
-            { data: 'occupation', name: 'occupation' },
-            { data: 'image', name: 'image' },
+            // { data: 'institution_attended', name: 'institution_attended' },
+            // { data: 'occupation', name: 'occupation' },
+            //{ data: 'image', name: 'image' },
             { data: 'action', name: 'action', orderable: true, searchable: true },
         ];
         initializeDataTable("{{ route('users.getUsers') }}", userColumns);
