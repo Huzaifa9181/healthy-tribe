@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthenticateController;
 use App\Http\Controllers\Api\WorkoutController;
 use App\Http\Controllers\Api\fastingTrackController;
+use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProgressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -67,8 +68,14 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/progress/workout/like/{id}', 'progress_workout_like');       
         Route::get('/progress/workout/comments/{id}', 'progress_workout_comment');       
         Route::post('/progress/workout/comments/store', 'progress_workout_comment_store');     
+    });
 
-        
+    Route::controller(PostController::class)->group(function () {
+        Route::post('/post/store', 'post_store');     
+        Route::get('/post/like/{id}', 'post_like');     
+        Route::get('/post/unlike/{id}', 'post_unlike');     
+        Route::get('/post/comments/{id}', 'post_comment');       
+        Route::post('/post/comments/store', 'post_comment_store');     
     });
 
     Route::get('/', function (Request $request) {

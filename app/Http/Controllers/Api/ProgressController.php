@@ -68,7 +68,7 @@ class ProgressController extends Controller
 
     public function progress_fasting_track_comment($id){
         $user = Auth::guard('sanctum')->user();
-        $comments = Comment::where('user_id', $user->id)
+        $comments = comment::where('user_id', $user->id)
         ->where('fasting_tracks_id', $id)
         ->get();
         return $this->successWithData($comments , 'Successfully Fetch All Comment For Fasting Track.');
@@ -85,7 +85,7 @@ class ProgressController extends Controller
         }
 
         $user = Auth::guard('sanctum')->user();
-        $comments = new Comment;
+        $comments = new comment;
         $comments->user_id = $user->id;
         $comments->comment = $request->comment;
         $comments->fasting_tracks_id = $request->fasting_tracks_id;
@@ -107,7 +107,7 @@ class ProgressController extends Controller
 
     public function progress_workout_comment($id){
         $user = Auth::guard('sanctum')->user();
-        $comments = Comment::where('user_id', $user->id)
+        $comments = comment::where('user_id', $user->id)
         ->where('workout_id', $id)
         ->get();
         return $this->successWithData($comments , 'Successfully Fetch All Comment For Workout.');
@@ -124,7 +124,7 @@ class ProgressController extends Controller
         }
 
         $user = Auth::guard('sanctum')->user();
-        $comments = new Comment;
+        $comments = new comment;
         $comments->user_id = $user->id;
         $comments->comment = $request->comment;
         $comments->workout_id = $request->workout_id;
