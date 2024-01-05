@@ -66,6 +66,15 @@ class ProgressController extends Controller
         return $this->successWithData($fasting_track->like , 'Successfully Add Like Fasting Tracker.');
     }
 
+    public function progress_fasting_track_unlike($id){
+        $fasting_track = fasting_track::find($id);
+        if($fasting_track->like > 0){
+            $fasting_track->decrement('like');         
+        }
+        $fasting_track->update();
+        return $this->successWithData($fasting_track->like , 'Successfully Unlike Fasting Tracker.');
+    }
+
     public function progress_fasting_track_comment($id){
         $user = Auth::guard('sanctum')->user();
         $comments = comment::where('user_id', $user->id)
@@ -103,6 +112,16 @@ class ProgressController extends Controller
         }
         $workout->update();
         return $this->successWithData($workout->like , 'Successfully Add Like Workout.');
+    }
+
+    public function progress_workout_unlike($id){
+        $workout = workout::find($id);
+        if($workout->like > 0){
+            $workout->decrement('like');         
+        }
+        
+        $workout->update();
+        return $this->successWithData($workout->like , 'Successfully Unlike Workout.');
     }
 
     public function progress_workout_comment($id){

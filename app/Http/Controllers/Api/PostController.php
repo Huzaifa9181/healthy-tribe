@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\comment;
 use App\Models\post;
+use App\Models\story;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -65,13 +66,12 @@ class PostController extends Controller
 
     public function post_unlike($id){
         $post = post::find($id);
-        if($post->like == null  && $post->like > 0){
-            $post->like = 0;
-        }else{
-            $post->decrement('like');
+        if($post->like > 0){
+            $post->decrement('like');         
         }
+
         $post->update();
-        return $this->successWithData($post->like , 'Successfully Add Like Workout.');
+        return $this->successWithData($post->like , 'Successfully Unlike Workout.');
     }
 
     public function post_comment ($id) {
@@ -100,5 +100,54 @@ class PostController extends Controller
         $comments->save();
         
         return $this->successWithData($comments , 'Successfully Saved Comment For Post.');
+    }
+
+    public function story_store(Request $request){
+        $validator = Validator::make($request->all(), [
+            'story' => 'required',
+        ]);
+    
+        if ($validator->fails()) {
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+        }
+
+        $user = Auth::guard('sanctum')->user();
+        $records = story::where('user_id' , $user->id)->where('created_at', '>=', now()->subHours(24))->count();
+        if($records < 10 ){
+            $story = new story();
+            if ($request->file('story')) {
+                $image = $request->file('story');
+                // Generate a unique filename
+                $filename = time() . '.' . $image->getClientOriginalExtension();
+                // Store the file in the public folder
+                $image->move(public_path('assets/story'), $filename);
+    
+                // Set the relative image path in the meal model
+                $story->path = 'assets/story/' . $filename;
+            }
+            $story->user_id = $user->id;
+            $story->save();
+            
+            return $this->successWithData($story , 'Successfully Story Saved.');
+        }else{
+            return $this->badRequestResponse('Unsuccessfully Story Limit Exceed.');
+        }
+    }
+
+    public function story_fetch ( $id = null ){
+        $user = Auth::guard('sanctum')->user();
+
+        if ( $id ){
+            $story = story::find($id);
+            if($story){
+                $data = story::where('user_id' , $story->user_id)->where('created_at', '>=', now()->subHours(24))->get();
+            }else{
+                return $this->badRequestResponse('No Story Fetch.');
+            }
+        }else{
+            $data = story::where('created_at', '>=', now()->subHours(24))->latest()->get();
+        }
+        return $this->successWithData($data , 'Successfully Story Data Fetch.');
+
     }
 }
