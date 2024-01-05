@@ -23,6 +23,7 @@ class ContentController extends Controller
             $content = new contents();
         }
         $content->privacy = serialize($request->input('privacy'));
+        $content->terms_services = serialize($request->input('terms_services'));
         $content->save();
 
         return redirect()->route('content.index')->with('success', 'Content updated successfully!');

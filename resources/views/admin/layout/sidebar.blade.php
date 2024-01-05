@@ -98,7 +98,7 @@
             <a href="#" class="nav-link active">
               <i class="nav-icon fas fa-globe"></i>
               <p>
-                Content
+                App Content
                 <i class="right fas fa-angle-left"></i>
               </p>
             </a>
@@ -107,6 +107,29 @@
                 <a href="{{ route('content.index') }}" class="nav-link">
                   <i class="far fa-circle nav-icon"></i>
                   <p>Update Content</p>
+                </a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-item menu-open">
+            <a href="#" class="nav-link active">
+              <i class="nav-icon fas fa-dumbbell"></i>
+              <p>
+                Workout Categories
+                <i class="right fas fa-angle-left"></i>
+              </p>
+            </a>
+            <ul class="nav nav-treeview">
+              <li class="nav-item">
+                <a href="{{ route('workout_cat.index') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>List</p>
+                </a>
+              </li>
+              <li class="nav-item">
+                <a href="{{ route('workout_cat.create') }}" class="nav-link">
+                  <i class="far fa-circle nav-icon"></i>
+                  <p>Create</p>
                 </a>
               </li>
             </ul>

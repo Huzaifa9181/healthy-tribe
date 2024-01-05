@@ -5,6 +5,9 @@
     <section class="content">
       <div class="row">
         <div class="col-md-12">
+          <form action="{{ route('content.update') }}" id="updateContentForm" method="POST">
+            @csrf
+            <input type="hidden" name="id" value="{{ $data->id ?? '' }}">
           <div class="card card-outline card-info">
             <div class="card-header">
               <h3 class="card-title">
@@ -12,19 +15,29 @@
               </h3>
             </div>
             <!-- /.card-header -->
-            <form action="{{ route('content.update') }}" id="updateContentForm" method="POST">
-              @csrf
-              <input type="hidden" name="id" value="{{ $data->id ?? '' }}">
               <div class="card-body">
-                <textarea id="summernote" name="privacy" placeholder="Enter Here">
+                <textarea class="summernote" name="privacy" placeholder="Enter Here">
                   {{ $data ? unserialize($data->privacy) : '' }}
                 </textarea>
               </div>
-              <div class="card-footer">
-                <button type="submit" class="btn btn-primary">Update</button>
-              </div>
-            </form>
           </div>
+          <div class="card card-outline card-info">
+            <div class="card-header">
+              <h3 class="card-title">
+                Terms of Service
+              </h3>
+            </div>
+            <!-- /.card-header -->
+              <div class="card-body">
+                <textarea class="summernote" name="terms_services" placeholder="Enter Here">
+                  {{ $data ? unserialize($data->terms_services) : '' }}
+                </textarea>
+              </div>      
+          </div>
+          <div class="card-footer">
+            <button type="submit" class="btn btn-primary">Update</button>
+          </div>
+        </form>
         </div>
         <!-- /.col-->
       </div>
@@ -34,7 +47,7 @@
     <script>
       $(function () {
         // Summernote
-        $('#summernote').summernote()
+        $('.summernote').summernote()
 
         // CodeMirror
         CodeMirror.fromTextArea(document.getElementById("codeMirrorDemo"), {
