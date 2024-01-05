@@ -8,4 +8,9 @@ use Illuminate\Database\Eloquent\Model;
 class categorie extends Model
 {
     use HasFactory;
+
+    public function getImageLinkAttribute()
+    {
+        return $this->image ? asset('public/' . $this->image) : null;
+    }
 }

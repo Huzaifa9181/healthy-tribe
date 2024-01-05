@@ -54,10 +54,20 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         Route::post('/subscription/update', 'SubscriptionController@update')->name('subscription.update');
         Route::post('/subscription/destroy', 'SubscriptionController@destroy')->name('subscription.destroy');
 
-        //Users
+        //App Content
         Route::resource('content', 'ContentController');
         Route::get('/content', 'ContentController@index')->name('content.index');
         Route::post('/content/update', 'ContentController@update')->name('content.update');
+
+        //Workout Categories
+        Route::resource('workout_cat', 'WorkoutCatController');
+        Route::get('/get_workout_cat', 'WorkoutCatController@get_workout_cat')->name('workout_cat.get_workout_cat');
+        Route::get('/workout_cat', 'WorkoutCatController@index')->name('workout_cat.index');
+        Route::get('/workout_cat/create', 'WorkoutCatController@create')->name('workout_cat.create');
+        Route::get('/workout_cat/edit/{id}', 'WorkoutCatController@edit')->name('workout_cat.edit');
+        Route::post('/workout_cat/store', 'WorkoutCatController@store')->name('workout_cat.store');
+        Route::post('/workout_cat/update', 'WorkoutCatController@update')->name('workout_cat.update');
+        Route::post('/workout_cat/destroy', 'WorkoutCatController@destroy')->name('workout_cat.destroy');
     });
 
 // Route::get('/admin/dashboard', function () {
