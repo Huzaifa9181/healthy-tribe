@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\AuthenticateController;
 use App\Http\Controllers\Api\WorkoutController;
 use App\Http\Controllers\Api\fastingTrackController;
+use App\Http\Controllers\Api\ProgressController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ApiAuthenticate;
@@ -42,6 +43,7 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/FetchAllPlans', 'FetchAllPlans');
         Route::get('/videos', 'getVideos');
         Route::get('/videos/{id}', 'getSpecificVideos');
+        Route::post('workout/store', 'progress_workout_store');         
     });
 
     Route::controller(fastingTrackController::class)->group(function () {
@@ -52,6 +54,21 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/fasting/milestone', 'milestone');
         Route::get('/fasting/calender/{id?}', 'calender');
         Route::get('/challenges', 'fetchAllChallenges');
+    });
+
+    
+    Route::controller(ProgressController::class)->group(function () {
+        Route::get('/progress/fasting/track/{id?}', 'progress_fasting_track');       
+        Route::get('/progress/fasting/like/{id}', 'progress_fasting_track_like');       
+        Route::get('/progress/fasting/comments/{id}', 'progress_fasting_track_comment');       
+        Route::post('/progress/fasting/comments/store', 'progress_fasting_track_comment_store');       
+        // workout
+        Route::get('/progress/workout/{id?}', 'progress_workout');       
+        Route::get('/progress/workout/like/{id}', 'progress_workout_like');       
+        Route::get('/progress/workout/comments/{id}', 'progress_workout_comment');       
+        Route::post('/progress/workout/comments/store', 'progress_workout_comment_store');     
+
+        
     });
 
     Route::get('/', function (Request $request) {

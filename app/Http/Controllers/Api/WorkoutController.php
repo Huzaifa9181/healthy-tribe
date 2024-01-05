@@ -11,6 +11,8 @@ use App\Models\workout;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Traits\HandleResponse;
+use Carbon\Carbon;
+use Illuminate\Support\Facades\Validator;
 
 class WorkoutController extends Controller
 {
@@ -124,5 +126,45 @@ class WorkoutController extends Controller
     public function getSpecificVideos($id){
         $video = video::find($id);
         return $this->successWithData($video , 'Successfully Fetch Specific Video');
+    }
+
+    public function progress_workout_store( Request $request ){
+        $validator = Validator::make($request->all(), [
+            'steps' => 'required',
+            'kcal' => 'required',
+            'bpm' => 'required',
+            'sleep' => 'required',
+        ]);
+    
+        if ($validator->fails()) {
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+        }
+
+        $user = Auth::guard('sanctum')->user();
+        $record = workout::where('user_id', $user->id)->latest('created_at')->first();
+        
+        if (!$record || Carbon::now()->diffInDays($record->created_at) >= 1) {
+
+            $newRecord = new workout();
+            $newRecord->steps = $request->steps;
+            $newRecord->kcal = $request->kcal;
+            $newRecord->bpm = $request->bpm;
+            $newRecord->sleep = $request->sleep;
+            $newRecord->user_id = $user->id;
+            $newRecord->save();
+            
+            return $this->successMessage('Workout Saved Successfully.');
+
+        } else {
+            $record->steps = $request->steps;
+            $record->kcal = $request->kcal;
+            $record->bpm = $request->bpm;
+            $record->sleep = $request->sleep;
+            $record->user_id = $user->id;
+            $record->update();
+        
+            return $this->successMessage('Workout Updated Successfully.');
+        }
+        
     }
 }
