@@ -5,12 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class video extends Model
+class message extends Model
 {
     use HasFactory;
-
-    public function user()
-    {
-        return $this->belongsTo(User::class, 'trainer_id', 'id');
-    }
+    protected $fillable = ['user_id' , 'message' , 'another_user_id'];
 }

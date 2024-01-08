@@ -33,11 +33,20 @@ class WorkoutController extends Controller
         return $this->successWithData($trainers , 'Successfully Fetch 10 Trainers');
     }
 
-    public function getCategories(){
-        $categorie = categorie::latest()  // Ordering by the latest first
-        ->limit(10)  // Limiting the results to 10
-        ->get();  // Getting the collective;
-        return $this->successWithData($categorie , 'Successfully Fetch 10 Categories');
+    public function getCategories($id = null){
+        if($id){
+            $plan = plan::where('category_id' , $id)->pluck('id');
+            $categorie = categorie::find($id);
+            $video = video::with(['user:id,name'])->select('id' , 'title' ,  'path' , 'duration' , 'trainer_id' , 'created_at')->whereIn('plan_id' , $plan)->get();
+            $data['categorie'] = $categorie;
+            $data['video'] = $video;
+            return $this->successWithData($data , 'Successfully Fetch 10 Categories');
+        }else{
+            $categorie = categorie::latest()  // Ordering by the latest first
+            ->limit(10)  // Limiting the results to 10
+            ->get();  // Getting the collective;
+            return $this->successWithData($categorie , 'Successfully Fetch 10 Categories');
+        }
     }
 
     public function FetchAllPlans(){

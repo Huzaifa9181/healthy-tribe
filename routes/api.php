@@ -38,7 +38,7 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
     Route::controller(WorkoutController::class)->group(function () {
         Route::get('/trainers', 'getTrainers');
         Route::get('/trainers/video', 'getTainerVideo');
-        Route::get('/categories', 'getCategories');
+        Route::get('/categories/{id?}', 'getCategories');
         Route::get('/plans', 'getPlans');
         Route::get('/plans/{id}', 'getPlan');
         Route::get('/FetchAllPlans', 'FetchAllPlans');
@@ -55,6 +55,7 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/fasting/milestone', 'milestone');
         Route::get('/fasting/calender/{id?}', 'calender');
         Route::get('/challenges', 'fetchAllChallenges');
+        Route::post('/websocket', 'sendMessage');
     });
 
     

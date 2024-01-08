@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\chatMessage;
 use App\Http\Controllers\Controller;
 use App\Models\article;
 use App\Models\challenge;
 use App\Models\fasting_track;
 use App\Models\meal;
+use App\Models\message;
 use Illuminate\Http\Request;
 use App\Traits\HandleResponse;
 use Illuminate\Support\Facades\Validator;
@@ -150,5 +152,21 @@ class fastingTrackController extends Controller
 
         // Calculate the difference in hours
         return $hours_difference = $start_time->diffInHours($end_time);
+    }
+
+    public function sendMessage(Request $request){
+        $user = Auth::guard('sanctum')->user();
+
+         // Create a new chat message with user ID and message content from the request
+         $message = message::create([
+            'user_id' => $user->id, // Use Auth::user() to get the authenticated user's ID
+            'message' => $request->input('message'), // Use the message from the request
+            'another_user_id' => 5, // Use Auth::user() to get the authenticated user's ID
+        ]);
+
+        // Broadcast the new chat message to the 'chat' channel
+        broadcast(new chatMessage($user->id , $message))->toOthers();
+
+        return $this->successWithData($message , 'Successfully Send Message.');
     }
 }
