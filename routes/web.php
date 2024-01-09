@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\WorkoutCatController;
 use App\Http\Controllers\Admin\ChatController;
+use App\Http\Controllers\Admin\PlanController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -82,6 +83,16 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/trainer/video/update', 'trainer_video_update')->name('trainer_video.update');
             Route::get('/trainer/video/edit/{id}', 'trainer_editVideo')->name('trainer_video.edit');
             Route::post('/videos/destroy', 'video_destroy')->name('trainer_video.destroy');
+        });
+
+        Route::controller(PlanController::class)->group(function () {
+            Route::get('/plan', 'plan_index')->name('plan.index');
+            Route::get('/plan/getPlans', 'getPlans')->name('plan.show');
+            Route::get('/plan/create', 'plan_create')->name('plan.create');
+            Route::post('/plan/store', 'plan_store')->name('plan.store');
+            Route::get('/plan/edit/{id}', 'plan_edit')->name('plan.edit');
+            Route::post('/plan/update', 'plan_update')->name('plan.update');
+            Route::post('/plan/destroy', 'plan_destroy')->name('plan.destroy');
         });
 
     });

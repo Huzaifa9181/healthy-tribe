@@ -187,7 +187,7 @@ class WorkoutCatController extends Controller
 
     public function trainer_getVideo(Request $request){
         if ($request->ajax()) {
-            $data = video::get();
+            $data = video::where('trainer_id' , Auth::user()->id)->get();
 
             return DataTables::of($data)
             ->addColumn('action', function ($row) {
