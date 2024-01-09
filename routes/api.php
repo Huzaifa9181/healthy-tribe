@@ -5,6 +5,7 @@ use App\Http\Controllers\Api\WorkoutController;
 use App\Http\Controllers\Api\fastingTrackController;
 use App\Http\Controllers\Api\PostController;
 use App\Http\Controllers\Api\ProgressController;
+use App\Http\Controllers\Api\SocialController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Middleware\ApiAuthenticate;
@@ -55,7 +56,6 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/fasting/milestone', 'milestone');
         Route::get('/fasting/calender/{id?}', 'calender');
         Route::get('/challenges', 'fetchAllChallenges');
-        Route::post('/websocket', 'sendMessage');
     });
 
     
@@ -81,6 +81,19 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('/post/comments/store', 'post_comment_store');     
         Route::post('/story/store', 'story_store');     
         Route::get('/story/fetch/{id?}', 'story_fetch');     
+        Route::get('/story/like/{id?}/{status?}', 'story_like');     
+    });
+
+    Route::controller(SocialController::class)->group(function () {
+        Route::get('/fetchChat/{id?}', 'fetchChat');
+        Route::post('/sendMessage', 'sendMessage');
+        Route::post('/chat/block', 'chat_block');
+        Route::post('/chat/delete', 'chat_delete');
+        Route::post('/group/MemberAdded', 'addMember');
+        Route::get('/group/FetchAllGroup', 'FetchAllGroup');
+        Route::post('/group/SendGroupMessage', 'SendGroupMessage');
+        Route::get('/group/fetchChat/{id?}', 'group_fetchChat');
+        Route::post('/Agent/sendMessage', 'AgentsendMessage');
     });
 
     Route::get('/', function (Request $request) {

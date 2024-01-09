@@ -142,16 +142,20 @@ class AuthenticateController extends Controller
             'age' => 'required|integer',
         ]);
         
+        if ($validator->fails()) {
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+        }
+
         $user = user::find($user->id);
         if ($request->file('image')) {
             $validator->addRules([
                 'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
             ]);
-        
+            
             if ($validator->fails()) {
                 return $this->fail( 422 ,"Invalid credentials", $validator->errors());
             }
-
+            
             $image = $request->file('image');
             
             // Generate a unique filename
@@ -162,10 +166,6 @@ class AuthenticateController extends Controller
 
             // Set the relative image path in the meal model
             $user->image = 'assets/profile_images/' . $filename;
-        }
-
-        if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
 
         $user->name = $request->name;

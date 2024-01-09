@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('path');
             $table->unsignedBigInteger('user_id');
+            $table->integer('like')->nullable();
             $table->timestamps();
         });
     }

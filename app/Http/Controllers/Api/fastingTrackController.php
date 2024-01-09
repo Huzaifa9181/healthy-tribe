@@ -154,19 +154,5 @@ class fastingTrackController extends Controller
         return $hours_difference = $start_time->diffInHours($end_time);
     }
 
-    public function sendMessage(Request $request){
-        $user = Auth::guard('sanctum')->user();
-
-         // Create a new chat message with user ID and message content from the request
-         $message = message::create([
-            'user_id' => $user->id, // Use Auth::user() to get the authenticated user's ID
-            'message' => $request->input('message'), // Use the message from the request
-            'another_user_id' => 5, // Use Auth::user() to get the authenticated user's ID
-        ]);
-
-        // Broadcast the new chat message to the 'chat' channel
-        broadcast(new chatMessage($user->id , $message))->toOthers();
-
-        return $this->successWithData($message , 'Successfully Send Message.');
-    }
+    
 }

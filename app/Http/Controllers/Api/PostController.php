@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\comment;
 use App\Models\post;
 use App\Models\story;
+use App\Models\StoryLike;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -149,5 +150,28 @@ class PostController extends Controller
         }
         return $this->successWithData($data , 'Successfully Story Data Fetch.');
 
+    }
+
+    public function story_like($id = null , $status = null){
+        $user = Auth::guard('sanctum')->user();
+        if($id && $status){
+            if($status == "like" || $status == "Like"){
+                $story = story::find($id);
+                $story->increment('user_like');
+                $story->update();
+
+                $story_like = new StoryLike;
+                $story_like->story_id = $id;
+                $story_like->user_id = $user->id;
+                $story_like->save();
+                return $this->successWithData($story , 'Story Like Successfully.');
+            }else{
+                $story = story::find($id);
+                $story->decrement('user_like');
+                $story->update();
+                $story_like = StoryLike::where('user_id' , $user->id)->where('story_id' , $id)->delete();
+                return $this->successWithData($story , 'Story Unlike Successfully.');            }
+
+        }
     }
 }

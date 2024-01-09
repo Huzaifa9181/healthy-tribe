@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ChatController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -68,9 +69,8 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         Route::post('/workout_cat/store', 'WorkoutCatController@store')->name('workout_cat.store');
         Route::post('/workout_cat/update', 'WorkoutCatController@update')->name('workout_cat.update');
         Route::post('/workout_cat/destroy', 'WorkoutCatController@destroy')->name('workout_cat.destroy');
-    });
+        Route::controller(ChatController::class)->group(function () {
+            Route::get('/chat', 'index');
+        });
 
-// Route::get('/admin/dashboard', function () {
-//     return view('admin.dashboard');
-// });
-// Route::view('dashboard', 'dashboard');
+    });

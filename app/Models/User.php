@@ -59,4 +59,7 @@ class User extends Authenticatable
         return $this->image ? asset('public/' . $this->image) : null;
     }
 
+    public function isMemberOfGroup( $userId , $groupId ) {
+        return GroupMember::where('id', $groupId)->where('user_id' , $userId)->exists();
+    }
 }
