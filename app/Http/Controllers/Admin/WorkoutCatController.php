@@ -5,6 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\categorie;
+use App\Models\video;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -165,5 +167,129 @@ class WorkoutCatController extends Controller
                 return response()->json(['message' => 'Workout categories not found'], 404);
             }
         }
+    }
+
+    public function trainer_video_index(){
+        $title = 'Trainer Video';
+        return view('admin.trainer_video.index' , compact('title'));
+    }
+
+    public function trainer_video_create(){
+        $title = 'Trainer Video Create';
+        return view('admin.trainer_video.create' , compact('title'));
+    }
+
+    public function trainer_editVideo ($id){
+        $title = 'Trainer Video Edit';
+        $data = video::find($id);
+        return view('admin.trainer_video.edit'  , compact('title' , 'data'));
+    }
+
+    public function trainer_getVideo(Request $request){
+        if ($request->ajax()) {
+            $data = video::get();
+
+            return DataTables::of($data)
+            ->addColumn('action', function ($row) {
+                // Add any custom action buttons here
+                $editButton = '<a href="' . route('trainer_video.edit', ['id' => $row->id]) . '" class="btn btn-info">Edit</a>';
+                $deleteButton = '<button class="btn btn-danger delete-user" data-id="' . $row->id . '" data-model="videos" data-toggle="modal" data-target="#deleteUserModal">Delete</button>';
+            
+                return $editButton . ' ' . $deleteButton;
+            })
+            ->rawColumns(['action'])
+                ->make(true);
+        }
+        return view('admin.workout_cat.index');
+    }
+
+    public function video_destroy( Request $request){
+        if ($request->ajax()) {
+            $userId = $request->input('id');
+            $video = video::find($userId);
+    
+            if ($video) {
+                if ($video->path) {
+                    Storage::disk('public')->delete($video->path);
+                }
+            } 
+            $video->delete();
+            return response()->json(['message' => 'Trainer video deleted successfully']);
+        }
+    }
+
+    public function trainer_video_store (Request $request) {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'video' => 'required|file|mimes:mp4|max:20480', 
+            'duration' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('error' , $validator->errors());
+        }
+
+        $video = new video;
+        $video->trainer_id = Auth::user()->id;
+        if ($request->hasFile('video')) {
+            $videos = $request->file('video');
+            $filename = time() . '.' . $videos->getClientOriginalExtension();
+            
+            // Store the file in the public folder
+            $videos->move(public_path('assets/trainer_video'), $filename);
+
+            // Set the relative image path in the meal model
+            $video->path = 'assets/trainer_video/' . $filename;
+        }
+        $video->title = $request->title;
+        $video->duration = $request->duration;
+        $video->save();
+
+        return redirect()->route('trainer_video.index')->with('success', ' Trainer video saved successfully!');
+
+    }
+
+    public function trainer_video_update (Request $request) {
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'duration' => 'required',
+            'id' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('error' , $validator->errors());
+        }
+
+        $video = video::find($request->id);
+        $video->trainer_id = Auth::user()->id;
+        if ($request->hasFile('video')) {
+            $validator->addRules([
+                'video' => 'required|file|mimes:mp4|max:20480', 
+            ]);
+            
+            if ($validator->fails()) {
+                return back()->with('error' , $validator->errors());
+            }
+            
+            $videos = $request->file('video');
+            if ($video->path) {
+                Storage::disk('public')->delete($video->path);
+            }
+            $filename = time() . '.' . $videos->getClientOriginalExtension();
+            
+            // Store the file in the public folder
+            $videos->move(public_path('assets/trainer_video'), $filename);
+
+            // Set the relative image path in the meal model
+            $video->path = 'assets/trainer_video/' . $filename;         
+        }elseif ($request->has('hidden_video')) {
+            $video->path = $request->input('hidden_video');
+        }
+        $video->title = $request->title;
+        $video->duration = $request->duration;
+        $video->update();
+
+        return redirect()->route('trainer_video.index')->with('success', ' Trainer video updated successfully!');
+
     }
 }

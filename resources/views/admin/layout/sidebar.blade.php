@@ -31,8 +31,8 @@
               </p>
             </a>
           </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+          <li class="nav-item {{ request()->routeIs('admin.*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->routeIs('admin.*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-user-shield"></i>
               <p>
                 Admin
@@ -48,8 +48,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+          <li class="nav-item {{ request()->routeIs('users.*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->routeIs('users.*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-user"></i>
               <p>
                 Users
@@ -71,8 +71,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+          <li class="nav-item {{ request()->routeIs('subscription.*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->routeIs('subscription.*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-money-check"></i>
               <p>
                 Subcription
@@ -94,8 +94,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+          <li class="nav-item {{ request()->routeIs('content.*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->routeIs('content.*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-globe"></i>
               <p>
                 App Content
@@ -111,8 +111,8 @@
               </li>
             </ul>
           </li>
-          <li class="nav-item menu-open">
-            <a href="#" class="nav-link active">
+          <li class="nav-item {{ request()->routeIs('workout_cat.*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->routeIs('workout_cat.*') ? 'active' : '' }}">
               <i class="nav-icon fas fa-dumbbell"></i>
               <p>
                 Workout Categories
@@ -134,6 +134,29 @@
               </li>
             </ul>
           </li>
+          <li class="nav-item {{ request()->routeIs('trainer_video.*') ? 'menu-open' : '' }}">
+            <a href="#" class="nav-link {{ request()->routeIs('trainer_video.*') ? 'active' : '' }}">
+              <i class="nav-icon fas fa-dumbbell"></i>
+                <p>
+                    Trainer Video
+                    <i class="right fas fa-angle-left"></i>
+                </p>
+            </a>
+            <ul class="nav nav-treeview">
+                <li class="nav-item">
+                    <a href="{{ route('trainer_video.index') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>List</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{{ route('trainer_video.create') }}" class="nav-link">
+                        <i class="far fa-circle nav-icon"></i>
+                        <p>Create</p>
+                    </a>
+                </li>
+            </ul>
+        </li>        
         </ul>
       </nav>
       <!-- /.sidebar-menu -->

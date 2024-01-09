@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\WorkoutCatController;
 use App\Http\Controllers\Admin\ChatController;
 use Illuminate\Support\Facades\Route;
 
@@ -71,6 +72,16 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         Route::post('/workout_cat/destroy', 'WorkoutCatController@destroy')->name('workout_cat.destroy');
         Route::controller(ChatController::class)->group(function () {
             Route::get('/chat', 'index');
+        });
+
+        Route::controller(WorkoutCatController::class)->group(function () {
+            Route::get('/trainer/video', 'trainer_video_index')->name('trainer_video.index');
+            Route::get('/trainer/video/getVideo', 'trainer_getVideo')->name('trainer_video.show');
+            Route::get('/trainer/video/create', 'trainer_video_create')->name('trainer_video.create');
+            Route::post('/trainer/video/store', 'trainer_video_store')->name('trainer_video.store');
+            Route::post('/trainer/video/update', 'trainer_video_update')->name('trainer_video.update');
+            Route::get('/trainer/video/edit/{id}', 'trainer_editVideo')->name('trainer_video.edit');
+            Route::post('/videos/destroy', 'video_destroy')->name('trainer_video.destroy');
         });
 
     });
