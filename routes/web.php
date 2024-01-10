@@ -1,8 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\ArticleController;
+use App\Http\Controllers\Admin\ChallengeController;
 use App\Http\Controllers\Admin\WorkoutCatController;
 use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\PlanController;
+use App\Http\Controllers\Admin\QuestionController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,6 +88,36 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/videos/destroy', 'video_destroy')->name('trainer_video.destroy');
         });
 
+        Route::controller(ChallengeController::class)->group(function () {
+            Route::get('/challenge', 'index')->name('challenge.index');
+            Route::get('/challenge/getData', 'getData')->name('challenge.show');
+            Route::get('/challenge/create', 'create')->name('challenge.create');
+            Route::post('/challenge/store', 'store')->name('challenge.store');
+            Route::post('/challenge/update', 'update')->name('challenge.update');
+            Route::get('/challenge/edit/{id}', 'edit')->name('challenge.edit');
+            Route::post('/challenges/destroy', 'destroy')->name('trainer_video.destroy');
+        });
+
+        Route::controller(QuestionController::class)->group(function () {
+            Route::get('/question', 'index')->name('question.index');
+            Route::get('/question/getData', 'getData')->name('question.show');
+            Route::get('/question/create', 'create')->name('question.create');
+            Route::post('/question/store', 'store')->name('question.store');
+            Route::post('/question/update', 'update')->name('question.update');
+            Route::get('/question/edit/{id}', 'edit')->name('question.edit');
+            Route::post('/question/destroy', 'destroy')->name('question.destroy');
+        });
+
+        Route::controller(ArticleController::class)->group(function () {
+            Route::get('/article', 'index')->name('article.index');
+            Route::get('/article/getData', 'getData')->name('article.show');
+            Route::get('/article/create', 'create')->name('article.create');
+            Route::post('/article/store', 'store')->name('article.store');
+            Route::post('/article/update', 'update')->name('article.update');
+            Route::get('/article/edit/{id}', 'edit')->name('article.edit');
+            Route::post('/articles/destroy', 'destroy')->name('article.destroy');
+        });
+
         Route::controller(PlanController::class)->group(function () {
             Route::get('/plan', 'plan_index')->name('plan.index');
             Route::get('/plan/getPlans', 'getPlans')->name('plan.show');
@@ -92,7 +125,15 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/plan/store', 'plan_store')->name('plan.store');
             Route::get('/plan/edit/{id}', 'plan_edit')->name('plan.edit');
             Route::post('/plan/update', 'plan_update')->name('plan.update');
-            Route::post('/plan/destroy', 'plan_destroy')->name('plan.destroy');
+            Route::post('/plans/destroy', 'destroy')->name('plan.destroy');
+            // video Upload
+            Route::get('/plan/video', 'plan_video_index')->name('plan_video.index');
+            Route::get('/plan/video/getPlans', 'getPlansVideo')->name('plan_video.show');
+            Route::get('/plan/video/create', 'plan_video_create')->name('plan_video.create');
+            Route::post('/plan/video/store', 'plan_video_store')->name('plan_video.store');
+            Route::get('/plan/video/edit/{id}', 'plan_video_edit')->name('plan_video.edit');
+            Route::post('/plan/video/update', 'plan_video_update')->name('plan_video.update');
+            // Route::post('/videos/destroy', 'destroy')->name('plan.destroy');
         });
 
     });

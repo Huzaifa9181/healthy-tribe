@@ -13,4 +13,11 @@ class plan extends Model
     {
         return $this->hasMany(video::class , 'plan_id');
     }
+
+
+    
+    public function getImageLinkAttribute()
+    {
+        return $this->image ? asset('public/' . $this->image) : null;
+    }
 }

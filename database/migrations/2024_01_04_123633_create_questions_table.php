@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('question');
             $table->string('option');
-            $table->unsignedBigInteger('addition_id');
+            $table->unsignedBigInteger('addiction_id');
             $table->timestamps();
         });
     }

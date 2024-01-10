@@ -15,8 +15,9 @@
                 <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Name</th>
-                  <th>image</th>
+                  <th>Image</th>
+                  <th>Title</th>
+                  <th>Days</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -24,10 +25,11 @@
                 </tbody>
                 <tfoot>
                 <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>image</th>
-                    <th>Action</th>
+                  <th>ID</th>
+                  <th>Image</th>
+                  <th>Title</th>
+                  <th>Days</th>
+                  <th>Action</th>
                 </tr>
                 </tfoot>
               </table>
@@ -47,11 +49,12 @@
     <script>
         var userColumns = [
             { data: 'id', name: 'id' }, // Replace 'column1' with your actual column names
-            { data: 'name', name: 'name' },
             { data: 'image', name: 'image' },
+            { data: 'title', name: 'title' },
+            { data: 'days', name: 'days' },
             { data: 'action', name: 'action', orderable: true, searchable: true },
         ];
-        initializeDataTable("{{ route('workout_cat.get_workout_cat') }}", userColumns);
+        initializeDataTable("{{ route('challenge.show') }}", userColumns);
     </script> 
     @endsection
 

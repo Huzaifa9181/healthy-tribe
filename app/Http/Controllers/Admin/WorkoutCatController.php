@@ -168,7 +168,10 @@ class WorkoutCatController extends Controller
             }
         }
     }
+    
 
+    // -------------------- Trainer Video ------------------------------------
+    
     public function trainer_video_index(){
         $title = 'Trainer Video';
         return view('admin.trainer_video.index' , compact('title'));
@@ -187,9 +190,17 @@ class WorkoutCatController extends Controller
 
     public function trainer_getVideo(Request $request){
         if ($request->ajax()) {
-            $data = video::where('trainer_id' , Auth::user()->id)->get();
+            $data = video::whereNotNull('trainer_id')->get();
 
             return DataTables::of($data)
+            ->addColumn('path', function ($row) {
+                // Add any custom action buttons here
+                $video = '<video controls style="width: 30%;">
+                    <source src="'.asset('public/'.$row->path).'" type="video/mp4" >
+                </video>';
+            
+                return $video;
+            })
             ->addColumn('action', function ($row) {
                 // Add any custom action buttons here
                 $editButton = '<a href="' . route('trainer_video.edit', ['id' => $row->id]) . '" class="btn btn-info">Edit</a>';
@@ -197,10 +208,10 @@ class WorkoutCatController extends Controller
             
                 return $editButton . ' ' . $deleteButton;
             })
-            ->rawColumns(['action'])
+            ->rawColumns(['path','action'])
                 ->make(true);
         }
-        return view('admin.workout_cat.index');
+        return view('admin.trainer_video.index');
     }
 
     public function video_destroy( Request $request){
