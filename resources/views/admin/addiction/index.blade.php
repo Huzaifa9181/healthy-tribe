@@ -15,8 +15,7 @@
                 <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Title</th>
-                  <th>Description</th>
+                  <th>Name</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -25,8 +24,7 @@
                 <tfoot>
                 <tr>
                   <th>ID</th>
-                  <th>Title</th>
-                  <th>Description</th>
+                  <th>Name</th>
                   <th>Action</th>
                 </tr>
                 </tfoot>
@@ -47,11 +45,10 @@
     <script>
         var userColumns = [
             { data: 'id', name: 'id' }, // Replace 'column1' with your actual column names
-            { data: 'title', name: 'title' },
-            { data: 'description', name: 'description' },
+            { data: 'name', name: 'name' },
             { data: 'action', name: 'action', orderable: true, searchable: true },
         ];
-        initializeDataTable("{{ route('article.show') }}", userColumns);
+        initializeDataTable("{{ route('addiction.show') }}", userColumns);
     </script> 
     @endsection
 

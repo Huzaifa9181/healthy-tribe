@@ -245,6 +245,106 @@
                       </li>
                   </ul>
               </li>
+              <li class="nav-item {{ request()->routeIs('addiction.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('addiction.*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-dumbbell"></i>
+                    <p>
+                        Addictions
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('addiction.index') }}"
+                            class="nav-link {{ request()->routeIs('addiction.index') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('addiction.create') }}"
+                            class="nav-link {{ request()->routeIs('addiction.create') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item {{ request()->routeIs('question.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('question.*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-dumbbell"></i>
+                    <p>
+                        Questions
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('question.index') }}"
+                            class="nav-link {{ request()->routeIs('question.index') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('question.create') }}"
+                            class="nav-link {{ request()->routeIs('question.create') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item {{ request()->routeIs('challenge.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('challenge.*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-dumbbell"></i>
+                    <p>
+                        Challenge
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('challenge.index') }}"
+                            class="nav-link {{ request()->routeIs('challenge.index') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('challenge.create') }}"
+                            class="nav-link {{ request()->routeIs('challenge.create') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item {{ request()->routeIs('group.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('group.*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-dumbbell"></i>
+                    <p>
+                        Groups
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('group.index') }}"
+                            class="nav-link {{ request()->routeIs('group.index') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('group.create') }}"
+                            class="nav-link {{ request()->routeIs('group.create') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
             </ul>
         </nav>
         <!-- /.sidebar-menu -->

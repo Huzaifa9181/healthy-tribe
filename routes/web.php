@@ -1,9 +1,11 @@
 <?php
 
+use App\Http\Controllers\Admin\AddictionController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\ChallengeController;
 use App\Http\Controllers\Admin\WorkoutCatController;
 use App\Http\Controllers\Admin\ChatController;
+use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\QuestionController;
 use Illuminate\Support\Facades\Route;
@@ -108,6 +110,16 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/question/destroy', 'destroy')->name('question.destroy');
         });
 
+        Route::controller(AddictionController::class)->group(function () {
+            Route::get('/addiction', 'index')->name('addiction.index');
+            Route::get('/addiction/getData', 'getData')->name('addiction.show');
+            Route::get('/addiction/create', 'create')->name('addiction.create');
+            Route::post('/addiction/store', 'store')->name('addiction.store');
+            Route::post('/addiction/update', 'update')->name('addiction.update');
+            Route::get('/addiction/edit/{id}', 'edit')->name('addiction.edit');
+            Route::post('/addiction/destroy', 'destroy')->name('addiction.destroy');
+        });
+
         Route::controller(ArticleController::class)->group(function () {
             Route::get('/article', 'index')->name('article.index');
             Route::get('/article/getData', 'getData')->name('article.show');
@@ -116,6 +128,16 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/article/update', 'update')->name('article.update');
             Route::get('/article/edit/{id}', 'edit')->name('article.edit');
             Route::post('/articles/destroy', 'destroy')->name('article.destroy');
+        });
+
+        Route::controller(GroupController::class)->group(function () {
+            Route::get('/group', 'index')->name('group.index');
+            Route::get('/group/getData', 'getData')->name('group.show');
+            Route::get('/group/create', 'create')->name('group.create');
+            Route::post('/group/store', 'store')->name('group.store');
+            Route::post('/group/update', 'update')->name('group.update');
+            Route::get('/group/edit/{id}', 'edit')->name('group.edit');
+            Route::post('/group/destroy', 'destroy')->name('group.destroy');
         });
 
         Route::controller(PlanController::class)->group(function () {
