@@ -15,10 +15,8 @@
                 <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Question</th>
-                  <th>Options</th>
-                  <th>Addiction</th>
-                  <th>Type</th>
+                  <th>Image</th>
+                  <th>Addiction Type</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -27,10 +25,8 @@
                 <tfoot>
                 <tr>
                   <th>ID</th>
-                  <th>Question</th>
-                  <th>Options</th>
-                  <th>Addiction</th>
-                  <th>Type</th>
+                  <th>Image</th>
+                  <th>Addiction Type</th>
                   <th>Action</th>
                 </tr>
                 </tfoot>
@@ -51,13 +47,11 @@
     <script>
         var userColumns = [
             { data: 'id', name: 'id' }, // Replace 'column1' with your actual column names
-            { data: 'question', name: 'question' },
-            { data: 'option', name: 'option' },
-            { data: 'addiction', name: 'addiction' },
-            { data: 'type', name: 'type' },
+            { data: 'image', name: 'image' },
+            { data: 'addiction_id', name: 'addiction_id' },
             { data: 'action', name: 'action', orderable: true, searchable: true },
         ];
-        initializeDataTable("{{ route('question.show') }}", userColumns);
+        initializeDataTable("{{ route('motivation.show') }}", userColumns);
     </script> 
     @endsection
 

@@ -35,7 +35,16 @@
                                     @endif
                                 </select>
                             </div>
-                            <div class="form-group col-md-3 mt-4">
+
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputName">Type</label>
+                                <select name="type" class="form-control">
+                                    <option value="">--Select Type--</option>
+                                    <option value="radio">Radio</option>
+                                    <option value="checkbox">Checkbox</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6 mt-4">
                                 <button id="addButton" class="btn btn-primary">+</button>
                                 <button id="removeButton" class="btn btn-danger mx-3">-</button>
                             </div>
@@ -58,28 +67,33 @@
         <!-- /.row -->
     </div><!-- /.container-fluid -->
 </section>
+
 <!-- /.content -->
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 <script>
     $(document).ready(function() {
-        var counter = 0;
+    var counter = 0;
 
-        $("#addButton").click(function(e) {
-            e.preventDefault();
-            counter++;
-            $("#inputForm").append('<div class="form-group col-md-6" id="input' + counter +
-                '"><label for="exampleInputName">Option ' + counter +
-                '</label><input type="text" class="form-control" name="option[]" required /></div>');
-        });
+    $("#addButton").click(function(e) {
+        e.preventDefault();
+        counter++;
+        var newInputId = 'inputOption' + counter; // Ensure unique ID for each input
 
-        $("#removeButton").click(function(e) {
-            e.preventDefault();
-            if (counter > 0) {
-                $("#input" + counter).remove();
-                counter--;
-            }
-        });
+        // Append the new elements to the inputForm
+        $("#inputForm").append('<div class="form-group col-md-6" id="div' + newInputId +
+            '"><label for="' + newInputId + '">Option ' + counter +
+            '</label><input type="text" class="form-control" name="option[]" id="' + newInputId + '" required /></div>');
     });
+
+    $("#removeButton").click(function(e) {
+        e.preventDefault();
+        if (counter > 0) {
+            $("#divinputOption" + counter).remove(); // Use the new ID with "div" prefix to remove the div
+            counter--;
+        }
+    });
+});
+
 </script>
 @endsection

@@ -39,6 +39,20 @@
                                     @endif
                                 </select>
                             </div>
+                            <?php $type =['radio' => 'Radio' , 'checkbox' => 'Checkbox']; ?> 
+                            <div class="form-group col-md-6">
+                                <label for="exampleInputName">Type</label>
+                                <select name="type" class="form-control">
+                                    <option value="">--Select Type--</option>
+                                    @foreach ($type as $key => $val)
+                                        @if ( $key === $data->type )
+                                            <option value="{{$key}}" selected>{{$val}}</option>        
+                                        @else
+                                            <option value="{{$key}}">{{$val}}</option>        
+                                        @endif
+                                    @endforeach
+                                </select>
+                            </div>
                             <div class="form-group col-md-3 mt-4">
                                 <button id="addButton" class="btn btn-primary">+</button>
                                 <button id="removeButton" class="btn btn-danger mx-3">-</button>

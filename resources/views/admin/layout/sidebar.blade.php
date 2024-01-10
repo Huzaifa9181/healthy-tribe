@@ -147,7 +147,7 @@
                 </li>
                 <li class="nav-item {{ request()->routeIs('trainer_video.*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ request()->routeIs('trainer_video.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-dumbbell"></i>
+                        <i class="nav-icon fas fa-video"></i>
                         <p>
                             Trainer Video
                             <i class="right fas fa-angle-left"></i>
@@ -197,7 +197,7 @@
                 </li>
                 <li class="nav-item {{ request()->routeIs('plan_video.*') ? 'menu-open' : '' }}">
                     <a href="#" class="nav-link {{ request()->routeIs('plan_video.*') ? 'active' : '' }}">
-                        <i class="nav-icon fas fa-dumbbell"></i>
+                        <i class="nav-icon fas fa-video"></i>
                         <p>
                             Plans Videos
                             <i class="right fas fa-angle-left"></i>
@@ -272,7 +272,7 @@
             </li>
             <li class="nav-item {{ request()->routeIs('question.*') ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ request()->routeIs('question.*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-dumbbell"></i>
+                    <i class="nav-icon fas fa-question"></i>
                     <p>
                         Questions
                         <i class="right fas fa-angle-left"></i>
@@ -322,7 +322,7 @@
             </li>
             <li class="nav-item {{ request()->routeIs('group.*') ? 'menu-open' : '' }}">
                 <a href="#" class="nav-link {{ request()->routeIs('group.*') ? 'active' : '' }}">
-                    <i class="nav-icon fas fa-dumbbell"></i>
+                    <i class="nav-icon fas fa-users"></i>
                     <p>
                         Groups
                         <i class="right fas fa-angle-left"></i>
@@ -339,6 +339,81 @@
                     <li class="nav-item">
                         <a href="{{ route('group.create') }}"
                             class="nav-link {{ request()->routeIs('group.create') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item {{ request()->routeIs('motivation.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('motivation.*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-dumbbell"></i>
+                    <p>
+                        Motivations
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('motivation.index') }}"
+                            class="nav-link {{ request()->routeIs('motivation.index') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('motivation.create') }}"
+                            class="nav-link {{ request()->routeIs('motivation.create') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item {{ request()->routeIs('currency.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('currency.*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-money-bill"></i>
+                    <p>
+                        Currency
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('currency.index') }}"
+                            class="nav-link {{ request()->routeIs('currency.index') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('currency.create') }}"
+                            class="nav-link {{ request()->routeIs('currency.create') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>Create</p>
+                        </a>
+                    </li>
+                </ul>
+            </li>
+            <li class="nav-item {{ request()->routeIs('achieve.*') ? 'menu-open' : '' }}">
+                <a href="#" class="nav-link {{ request()->routeIs('currency.*') ? 'active' : '' }}">
+                    <i class="nav-icon fas fa-bicycle"></i>
+                    <p>
+                        Achieve
+                        <i class="right fas fa-angle-left"></i>
+                    </p>
+                </a>
+                <ul class="nav nav-treeview">
+                    <li class="nav-item">
+                        <a href="{{ route('achieve.index') }}"
+                            class="nav-link {{ request()->routeIs('achieve.index') ? 'active' : '' }}">
+                            <i class="far fa-circle nav-icon"></i>
+                            <p>List</p>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{{ route('achieve.create') }}"
+                            class="nav-link {{ request()->routeIs('achieve.create') ? 'active' : '' }}">
                             <i class="far fa-circle nav-icon"></i>
                             <p>Create</p>
                         </a>

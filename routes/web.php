@@ -1,11 +1,14 @@
 <?php
 
+use App\Http\Controllers\Admin\AchieveController;
 use App\Http\Controllers\Admin\AddictionController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\ChallengeController;
 use App\Http\Controllers\Admin\WorkoutCatController;
 use App\Http\Controllers\Admin\ChatController;
+use App\Http\Controllers\Admin\CurrencyController;
 use App\Http\Controllers\Admin\GroupController;
+use App\Http\Controllers\Admin\MotivationController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\QuestionController;
 use Illuminate\Support\Facades\Route;
@@ -138,6 +141,37 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/group/update', 'update')->name('group.update');
             Route::get('/group/edit/{id}', 'edit')->name('group.edit');
             Route::post('/group/destroy', 'destroy')->name('group.destroy');
+        });
+
+        Route::controller(MotivationController::class)->group(function () {
+            Route::get('/motivation', 'index')->name('motivation.index');
+            Route::get('/motivation/getData', 'getData')->name('motivation.show');
+            Route::get('/motivation/create', 'create')->name('motivation.create');
+            Route::post('/motivation/store', 'store')->name('motivation.store');
+            Route::post('/motivation/update', 'update')->name('motivation.update');
+            Route::get('/motivation/edit/{id}', 'edit')->name('motivation.edit');
+            Route::post('/motivation/destroy', 'destroy')->name('motivation.destroy');
+        });
+
+
+        Route::controller(CurrencyController::class)->group(function () {
+            Route::get('/currency', 'index')->name('currency.index');
+            Route::get('/currency/getData', 'getData')->name('currency.show');
+            Route::get('/currency/create', 'create')->name('currency.create');
+            Route::post('/currency/store', 'store')->name('currency.store');
+            Route::post('/currency/update', 'update')->name('currency.update');
+            Route::get('/currency/edit/{id}', 'edit')->name('currency.edit');
+            Route::post('/currency/destroy', 'destroy')->name('currency.destroy');
+        });
+
+        Route::controller(AchieveController::class)->group(function () {
+            Route::get('/achieve', 'index')->name('achieve.index');
+            Route::get('/achieve/getData', 'getData')->name('achieve.show');
+            Route::get('/achieve/create', 'create')->name('achieve.create');
+            Route::post('/achieve/store', 'store')->name('achieve.store');
+            Route::post('/achieve/update', 'update')->name('achieve.update');
+            Route::get('/achieve/edit/{id}', 'edit')->name('achieve.edit');
+            Route::post('/achieve/destroy', 'destroy')->name('achieve.destroy');
         });
 
         Route::controller(PlanController::class)->group(function () {

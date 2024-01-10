@@ -67,6 +67,7 @@ class QuestionController extends Controller
             'question' => 'required',
             'option' => 'required',
             'addiction' => 'required',
+            'type' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -76,6 +77,7 @@ class QuestionController extends Controller
         $question = new question();
         $question->question = $request->question;
         $question->addiction_id = $request->addiction;
+        $question->type = $request->type;
         $question->option = json_encode($request->option);
         $question->save();
 
@@ -112,6 +114,7 @@ class QuestionController extends Controller
             'option' => 'required',
             'addiction' => 'required',
             'id' => 'required',
+            'type' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -120,6 +123,7 @@ class QuestionController extends Controller
 
         $question = question::find($request->id);
         $question->question = $request->question;
+        $question->type = $request->type;
         $question->addiction_id = $request->addiction;
         $question->option = json_encode($request->option);
         $question->update();
