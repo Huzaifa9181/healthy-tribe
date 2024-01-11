@@ -18,7 +18,7 @@ class UserController extends Controller
     {
         if ($request->ajax()) {
             if(Auth::user()->role_id == 1){
-                $data = User::where('role_id', '!=', 1)->where('role_id', 2)->where('role_id', 3)->with('role')->get();
+                $data = User::where('role_id', '!=', 1)->with('role')->get();
             }else{
                 $data = User::where('id', '!=', 1)->where('role_id', 3)->with('role')->get();
             }
