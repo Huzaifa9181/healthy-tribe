@@ -83,6 +83,11 @@ class ResourceTrainingController extends Controller
             return back()->with('error' , $validator->errors());
         }
 
+        $count = resource_training::count();
+        if($count > 0){
+            return back()->with('error' , "This Addiction Resource is already exsist.");
+        }
+
         $resource_training = new resource_training();
         if ($request->hasFile('pdf')) {
             $pdf = $request->file('pdf');

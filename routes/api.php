@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Api\AddictionController;
 use App\Http\Controllers\Api\AuthenticateController;
 use App\Http\Controllers\Api\WorkoutController;
 use App\Http\Controllers\Api\fastingTrackController;
@@ -94,6 +95,17 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('/group/SendGroupMessage', 'SendGroupMessage');
         Route::get('/group/fetchChat/{id?}', 'group_fetchChat');
         Route::post('/Agent/sendMessage', 'AgentsendMessage');
+    });
+
+    Route::controller(AddictionController::class)->group(function () {
+        Route::get('addiction/type/{id?}' , 'addiction_type');
+        Route::get('addiction/question/{id}' , 'addiction_question');
+        Route::get('currency/list' , 'currency_list');
+        Route::get('motivation/list' , 'motivate_list');
+        Route::get('resource/training/{id}' , 'resource_training');
+        Route::post('addiction/money/store' , 'addiction_money_store');
+        Route::post('addiction/time/store' , 'addiction_time_store');
+        Route::get('addiction/track/{type}' , 'addiction_track');
     });
 
     Route::get('/', function (Request $request) {
