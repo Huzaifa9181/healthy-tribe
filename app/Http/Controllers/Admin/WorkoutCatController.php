@@ -190,7 +190,11 @@ class WorkoutCatController extends Controller
 
     public function trainer_getVideo(Request $request){
         if ($request->ajax()) {
-            $data = video::whereNotNull('trainer_id')->get();
+            if(Auth::user()->role_id == 1){
+                $data = video::whereNotNull('trainer_id')->get();
+            }else{
+                $data = video::whereNotNull('trainer_id')->where('trainer_id' , Auth::user()->id)->get();
+            }
 
             return DataTables::of($data)
             ->addColumn('path', function ($row) {

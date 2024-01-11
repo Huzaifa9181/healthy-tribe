@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -16,7 +17,12 @@ class UserController extends Controller
     public function getUsers(Request $request)
     {
         if ($request->ajax()) {
-            $data = User::where('id', '!=', 1)->where('role_id', '!=', 1)->with('role')->get();
+            if(Auth::user()->role_id == 1){
+                $data = User::where('role_id', '!=', 1)->where('role_id', 2)->where('role_id', 3)->with('role')->get();
+            }else{
+                $data = User::where('id', '!=', 1)->where('role_id', 3)->with('role')->get();
+            }
+            
 
             return DataTables::of($data)
                 // ->addColumn('image', function ($row) {
@@ -176,5 +182,51 @@ class UserController extends Controller
                 return response()->json(['message' => 'User not found'], 404);
             }
         }
+    }
+
+    public function trainer_profile(){
+        $data = User::find(Auth::user()->id);
+        $title = $data->name . ' Trainer Profile';
+        return view('admin.users.profile' , compact('data' , 'title'));
+    }
+
+    public function trainer_profile_update(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => [
+                'required',
+                'string',
+                'email',
+                'max:255',
+                Rule::unique('users')->ignore(Auth::user()->id), // Ignore the current user's email
+            ],
+            'password' => 'nullable|string|min:8',
+            'phone_number' => 'required',
+            'dob' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return back()->with('error' , $validator->errors());
+        }
+
+        // Fetch the authenticated user
+        $user = User::find(Auth::user()->id);
+        // Update the user's profile
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make($request->input('password'));
+        $user->phone_number = $request->input('phone_number');
+        $user->dob = $request->input('dob');
+        $user->country = $request->input('country');
+        $user->state = $request->input('state');
+        $user->city = $request->input('city');
+        $user->weight = $request->input('weight');
+        $user->height = $request->input('height');
+        $user->age = $request->input('age');
+        $user->gender = $request->input('gender');
+        $user->update();
+
+        return back()->with('success', 'Trainer profile updated successfully!');
     }
 }

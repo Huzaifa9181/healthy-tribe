@@ -14,7 +14,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form action="{{ route('admin.update', ['id' => $data->id]) }}" id="editProfileForm" method="POST">
+            <form action="{{ route('admin.update', ['id' => $data->id]) }}" id="editProfileForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
@@ -33,6 +33,17 @@
                     <label for="exampleInputPhoneNumber">Phone Number</label>
                     <input type="tel" name="phone_number" value = "{{ $data->phone_number ?? '' }}" class="form-control" id="exampleInputPhoneNumber" placeholder="Enter phone number">
                   </div>
+                  <div class="form-group">
+                    <label for="image">Profile Image</label>
+                    <input type="file" name="image" class="form-control" style="padding: 3px !important;" id="image">
+                  </div>
+                  @if($data->image)
+                      <div class="form-group ">
+                          <strong>Current Image:</strong><br><br>
+                          <img src="{{ asset('public/'.$data->image) }}" alt="Profile Image" style="max-width: 100px;">
+                      </div>
+                  @endif
+                  <input type="hidden" name="hidden_image" value="{{ $data->image ?? '' }}">
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

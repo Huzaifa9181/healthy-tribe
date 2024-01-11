@@ -1,8 +1,10 @@
 <?php
 
-if (!function_exists('getModelDestroyRoute')) {
-    function getModelDestroyRoute($model) {
-        return route($model . '.destroy');
+use App\Models\general_setting;
+
+if (!function_exists('generalSetting')) {
+    function generalSetting(){
+        return general_setting::first() ?? '';
     }
 }
 

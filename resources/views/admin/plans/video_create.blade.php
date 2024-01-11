@@ -26,6 +26,19 @@
                       <input type="file" name="video" class="form-control" style="padding: 3px !important;" id="image">
                     </div>
                     <div class="form-group col-md-6">
+                      <label for="image">Workout Plan</label>
+                      <select name="plan_id" class="form-control">
+                        <option value="">--Select Workout Plan--</option>
+                        @if ($plan)
+                          @foreach ($plan as $val)
+                              <option value="{{$val->id}}">{{$val->Title}}</option>
+                          @endforeach
+                        @else
+                          <option value="" disabled>--No Workout Plan Found--</option>
+                        @endif
+                      </select>
+                    </div>
+                    <div class="form-group col-md-6">
                         <label for="image">Duration</label>
                         <input type="number" name="duration" class="form-control" id="exampleInputName" placeholder="Enter Duration">
                       </div>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Log in</title>
+  <title>{{generalSetting()->title ?? ''}} | Log in</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -17,7 +17,7 @@
 <body class="hold-transition login-page">
 <div class="login-box">
   <div class="login-logo">
-    <a href="#"><b>Admin</b>LTE</a>
+    <a href="#"><b>{{generalSetting()->title ?? ''}}</b></a>
   </div>
   <!-- /.login-logo -->
   <div class="card">
@@ -27,7 +27,7 @@
       <form action="{{ url('admin/login') }}" method="post">
         {!! csrf_field() !!}
         <div class="input-group mb-3">
-          <input type="email" name="email" class="form-control" placeholder="Email">
+          <input type="email" name="email" class="form-control" required placeholder="Email">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
@@ -35,7 +35,7 @@
           </div>
         </div>
         <div class="input-group mb-3">
-          <input type="password" name="password" class="form-control" placeholder="Password">
+          <input type="password" name="password" class="form-control" required placeholder="Password">
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
@@ -45,10 +45,10 @@
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="remember" name="rememberme" value="1" >
+              {{-- <input type="checkbox" id="remember" name="rememberme" value="1" >
               <label for="remember">
                 Remember Me
-              </label>
+              </label> --}}
             </div>
           </div>
           <!-- /.col -->
@@ -88,5 +88,28 @@
 <script src="{{url('public/admin/plugins/bootstrap/js/bootstrap.bundle.min.js')}}"></script>
 <!-- AdminLTE App -->
 <script src="{{url('public/admin/dist/js/adminlte.min.js')}}"></script>
+@yield('script')
+<script>
+  function alertErrors(response) {
+      var message = "";
+      for (var key in response) {
+          // Assuming there's only one error message per field
+          message += response[key][0] + "\n"; // Each error on a new line
+      }
+      alert(message);
+  }
+  var a = {!! json_encode(session('success')) !!};
+  var b = {!! json_encode(session('error')) !!};
+
+  if (a !== null && a !== "") {
+      alert(a);
+  }
+
+  if (typeof b === "object" && b !== null) { // Check if b is an object (e.g., a JSON response)
+      alertErrors(b);
+  } else if (b !== null && b !== "") {
+      alert(b);
+  }
+</script>
 </body>
 </html>

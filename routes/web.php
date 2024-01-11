@@ -7,10 +7,12 @@ use App\Http\Controllers\Admin\ChallengeController;
 use App\Http\Controllers\Admin\WorkoutCatController;
 use App\Http\Controllers\Admin\ChatController;
 use App\Http\Controllers\Admin\CurrencyController;
+use App\Http\Controllers\Admin\GeneralSettingController;
 use App\Http\Controllers\Admin\GroupController;
 use App\Http\Controllers\Admin\MotivationController;
 use App\Http\Controllers\Admin\PlanController;
 use App\Http\Controllers\Admin\QuestionController;
+use App\Http\Controllers\Admin\ResourceTrainingController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -54,6 +56,8 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         Route::post('/users/store', 'UserController@store')->name('users.store');
         Route::post('/users/update', 'UserController@update')->name('users.update');
         Route::post('/users/destroy', 'UserController@destroy')->name('users.destroy');
+        Route::get('/trainer/profile', 'UserController@trainer_profile')->name('trainer.profile');
+        Route::post('/trainer/profile/update', 'UserController@trainer_profile_update')->name('trainer.profile_update');
 
         //Subscription
         Route::resource('subscription', 'SubscriptionController');
@@ -80,7 +84,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         Route::post('/workout_cat/update', 'WorkoutCatController@update')->name('workout_cat.update');
         Route::post('/workout_cat/destroy', 'WorkoutCatController@destroy')->name('workout_cat.destroy');
         Route::controller(ChatController::class)->group(function () {
-            Route::get('/chat', 'index');
+            Route::get('/chat', 'index')->name('chat.index');
         });
 
         Route::controller(WorkoutCatController::class)->group(function () {
@@ -133,6 +137,16 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/articles/destroy', 'destroy')->name('article.destroy');
         });
 
+        Route::controller(ResourceTrainingController::class)->group(function () {
+            Route::get('/resource/training', 'index')->name('resource_training.index');
+            Route::get('/resource/training/getData', 'getData')->name('resource_training.show');
+            Route::get('/resource/training/create', 'create')->name('resource_training.create');
+            Route::post('/resource/training/store', 'store')->name('resource_training.store');
+            Route::post('/resource/training/update', 'update')->name('resource_training.update');
+            Route::get('/resource/training/edit/{id}', 'edit')->name('resource_training.edit');
+            Route::post('/resource/training/destroy', 'destroy')->name('resource_training.destroy');
+        });
+
         Route::controller(GroupController::class)->group(function () {
             Route::get('/group', 'index')->name('group.index');
             Route::get('/group/getData', 'getData')->name('group.show');
@@ -151,6 +165,16 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/motivation/update', 'update')->name('motivation.update');
             Route::get('/motivation/edit/{id}', 'edit')->name('motivation.edit');
             Route::post('/motivation/destroy', 'destroy')->name('motivation.destroy');
+        });
+
+        Route::controller(GeneralSettingController::class)->group(function () {
+            Route::get('/general/setting', 'index')->name('general_setting.index');
+            Route::get('/general/setting/getData', 'getData')->name('general_setting.show');
+            Route::get('/general/setting/create', 'create')->name('general_setting.create');
+            Route::post('/general/setting/store', 'store')->name('general_setting.store');
+            Route::post('/general/setting/update', 'update')->name('general_setting.update');
+            Route::get('/general/setting/edit/{id}', 'edit')->name('general_setting.edit');
+            Route::post('/general/setting/destroy', 'destroy')->name('general_setting.destroy');
         });
 
 

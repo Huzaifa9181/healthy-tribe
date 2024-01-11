@@ -7,7 +7,7 @@
         <div class="col-12">
           <div class="card">
             <div class="card-header">
-              <h3 class="card-title">List Trianer Video </h3>
+              <h3 class="card-title">{{$title}}</h3>
             </div>
             <!-- /.card-header -->
             <div class="card-body">
@@ -15,10 +15,9 @@
                 <thead>
                 <tr>
                   <th>ID</th>
-                  <th>Title</th>
-                  <th>Duration</th>
+                  <th>Pdf</th>
                   <th>Video</th>
-                  <th>Workout Plan</th>
+                  <th>Addiction</th>
                   <th>Action</th>
                 </tr>
                 </thead>
@@ -27,10 +26,9 @@
                 <tfoot>
                 <tr>
                   <th>ID</th>
-                  <th>Title</th>
-                  <th>Duration</th>
+                  <th>Pdf</th>
                   <th>Video</th>
-                  <th>Workout Plan</th>
+                  <th>Addiction</th>
                   <th>Action</th>
                 </tr>
                 </tfoot>
@@ -51,13 +49,12 @@
     <script>
         var userColumns = [
             { data: 'id', name: 'id' }, // Replace 'column1' with your actual column names
-            { data: 'title', name: 'title' },
-            { data: 'duration', name: 'duration' },
-            { data: 'path', name: 'video' },
-            { data: 'plan', name: 'plan' },
+            { data: 'pdf', name: 'pdf' },
+            { data: 'video', name: 'video' },
+            { data: 'addiction_id', name: 'addiction_id' },
             { data: 'action', name: 'action', orderable: true, searchable: true },
         ];
-        initializeDataTable("{{ route('plan_video.show') }}", userColumns);
+        initializeDataTable("{{ route('resource_training.show') }}", userColumns);
     </script> 
     @endsection
 

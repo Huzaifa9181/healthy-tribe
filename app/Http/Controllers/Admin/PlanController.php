@@ -34,7 +34,12 @@ class PlanController extends Controller
 
     public function getPlans(Request $request){
         if ($request->ajax()) {
-            $data = plan::get();
+            if(Auth::user()->role_id == 1){
+                $data = plan::get();
+            }else{
+                $data = plan::where('user_id' , Auth::user()->id)->get();
+            }
+            
 
             return DataTables::of($data)
             ->addColumn('image', function ($row) {
@@ -206,20 +211,31 @@ class PlanController extends Controller
     public function plan_video_create(){
         $title = 'Plan Video Create';
         $category = categorie::all();
-        return view('admin.plans.video_create' , compact('title' , 'category'));
+        $plan = plan::where('user_id' , Auth::user()->id)->get();
+        return view('admin.plans.video_create' , compact('title' , 'category' , 'plan'));
     }
 
     public function plan_video_edit ($id){
         $title = 'Plan Video Edit';
         $data = video::find($id);
-        return view('admin.plans.video_edit'  , compact('title' , 'data'));
+        $plan = plan::where('user_id' , Auth::user()->id)->get();
+        return view('admin.plans.video_edit'  , compact('title' , 'data','plan'));
     }
 
     public function getPlansVideo(Request $request){
         if ($request->ajax()) {
-            $data = video::whereNotNull('plan_id')->get();
+            if(Auth::user()->role_id == 1){
+                $data = video::whereNotNull('plan_id')->get();
+            }else{
+                $ids = Plan::where('user_id', Auth::user()->id)->pluck('id');
+
+                $data = video::whereNotNull('plan_id')->whereIn('plan_id' ,$ids)->get();
+            }
 
             return DataTables::of($data)
+            ->addColumn('plan', function ($row) {
+                return $plan = plan::find($row->plan_id)->Title ?? '';
+            })
             ->addColumn('path', function ($row) {
                 // Add any custom action buttons here
                 $video = '<video controls style="width: 30%;">
@@ -247,6 +263,7 @@ class PlanController extends Controller
             'title' => 'required',
             'video' => 'required|file|mimes:mp4|max:20480', 
             'duration' => 'required',
+            'plan_id' => 'required',
         ]);
 
         if ($validator->fails()) {
@@ -266,7 +283,7 @@ class PlanController extends Controller
         }
         $video->title = $request->title;
         $video->duration = $request->duration;
-        $video->plan_id = Auth::user()->id;
+        $video->plan_id = $request->plan_id;
         $video->save();
         return redirect()->route('plan_video.index')->with('success', 'Plan Video saved successfully!');
     }
@@ -277,6 +294,8 @@ class PlanController extends Controller
             'title' => 'required',
             'duration' => 'required',
             'id' => 'required',
+            'plan_id' => 'required',
+
         ]);
 
         if ($validator->fails()) {
@@ -284,7 +303,6 @@ class PlanController extends Controller
         }
 
         $video = video::find($request->id);
-        $video->plan_id = Auth::user()->id;
         if ($request->hasFile('video')) {
             $validator->addRules([
                 'video' => 'required|file|mimes:mp4|max:20480', 
@@ -310,6 +328,7 @@ class PlanController extends Controller
         }
         $video->title = $request->title;
         $video->duration = $request->duration;
+        $video->plan_id = $request->plan_id;
         $video->update();
 
         return redirect()->route('plan_video.index')->with('success', 'Plan Video updated successfully!');

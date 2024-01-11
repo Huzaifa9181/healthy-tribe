@@ -29,6 +29,23 @@
                         <label for="image">Duration</label>
                         <input type="number" name="duration" class="form-control" id="exampleInputName" value="{{$data->duration ?? ''}}" placeholder="Enter Duration">
                     </div>
+                    <div class="form-group col-md-6">
+                      <label for="image">Workout Plan</label>
+                      <select name="plan_id" class="form-control">
+                        <option value="">--Select Workout Plan--</option>
+                        @if ($plan)
+                          @foreach ($plan as $val)
+                            @if ($val->id === $data->plan_id)
+                              <option value="{{$val->id}}" selected>{{$val->Title}}</option>
+                            @else
+                              <option value="{{$val->id}}">{{$val->Title}}</option>
+                            @endif
+                          @endforeach
+                        @else
+                          <option value="" disabled>--No Workout Plan Found--</option>
+                        @endif
+                      </select>
+                    </div>
                     <input type="hidden" name="id" value="{{$data->id}}">
                     @if($data->path)
                         <div class="form-group col-md-6">
