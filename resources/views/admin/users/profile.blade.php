@@ -14,7 +14,7 @@
             </div>
             <!-- /.card-header -->
             <!-- form start -->
-            <form action="{{ route('trainer.profile_update') }}" id="createProfileForm" method="POST">
+            <form action="{{ route('trainer.profile_update') }}" id="createProfileForm" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="card-body">
                   <div class="form-group">
@@ -76,6 +76,17 @@
                     <label for="exampleInputCity">Age</label>
                     <input type="number" name="age" class="form-control" id="exampleInputCity" value="{{$data->age ?? ''}}">
                   </div>
+                  <div class="form-group">
+                    <label for="image">Profile Image</label>
+                    <input type="file" name="image" class="form-control" style="padding: 3px !important;" id="image">
+                  </div>
+                  @if($data->image)
+                      <div class="form-group ">
+                          <strong>Current Image:</strong><br><br>
+                          <img src="{{ asset('public/'.$data->image) }}" alt="Profile Image" style="max-width: 100px;">
+                      </div>
+                  @endif
+                  <input type="hidden" name="hidden_image" value="{{ $data->image ?? '' }}">
                 </div>
                 <!-- /.card-body -->
                 <div class="card-footer">

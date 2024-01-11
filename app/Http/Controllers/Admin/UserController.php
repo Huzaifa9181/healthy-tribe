@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 
@@ -146,6 +147,7 @@ class UserController extends Controller
         // Fetch the authenticated user
         $user = User::find($request->id);
         // Update the user's profile
+        
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
@@ -213,6 +215,26 @@ class UserController extends Controller
         // Fetch the authenticated user
         $user = User::find(Auth::user()->id);
         // Update the user's profile
+        if ($request->hasFile('image')) {
+            $validator->addRules([
+                'image' => 'image|mimes:jpeg,png,jpg|max:2048',
+            ]);
+            
+            if ($validator->fails()) {
+                return back()->with('error' , $validator->errors());
+            }
+            if ($user->image) {
+                Storage::disk('public')->delete($user->image);
+            }
+            $image = $request->file('image');
+            $filename = time() . '.' . $image->getClientOriginalExtension();
+            
+            // Store the file in the public folder
+            $image->move(public_path('assets/profile_images'), $filename);
+            $user->image = 'assets/profile_images/' . $filename;
+        } elseif ($request->has('hidden_image')) {
+            $user->image = $request->input('hidden_image');
+        }
         $user->name = $request->input('name');
         $user->email = $request->input('email');
         $user->password = Hash::make($request->input('password'));
