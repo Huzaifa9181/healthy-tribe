@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Events\chatMessage;
 use App\Http\Controllers\Controller;
+use App\Models\achieve;
 use App\Models\article;
 use App\Models\challenge;
 use App\Models\fasting_track;
@@ -154,5 +155,9 @@ class fastingTrackController extends Controller
         return $hours_difference = $start_time->diffInHours($end_time);
     }
 
+    public function fetchAllachieve (){
+        $latestArticle = achieve::all();
+        return $this->successWithData($latestArticle , 'Successfully Fetch Achieve.');
+    }
     
 }

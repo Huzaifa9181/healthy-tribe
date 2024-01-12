@@ -41,7 +41,7 @@
 <!-- ChartJS -->
 <script src="{{ url('public/admin/plugins/chart.js/Chart.min.js') }}"></script>
 <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
-<script src="{{ url('public/admin/dist/js/pages/dashboard2.js') }}"></script>
+
 <!-- Summernote -->
 <script src="{{ url('public/admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
 <!-- CodeMirror -->

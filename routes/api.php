@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AddictionController;
 use App\Http\Controllers\Api\AuthenticateController;
+use App\Http\Controllers\Api\CommunityController;
 use App\Http\Controllers\Api\WorkoutController;
 use App\Http\Controllers\Api\fastingTrackController;
 use App\Http\Controllers\Api\PostController;
@@ -55,8 +56,10 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('/fasting/track_start', 'fasting_track_start');
         Route::post('/fasting/track_end', 'fasting_track_end');
         Route::get('/fasting/milestone', 'milestone');
+        Route::post('/fasting/activity/store', 'fasting_activity_store');
         Route::get('/fasting/calender/{id?}', 'calender');
         Route::get('/challenges', 'fetchAllChallenges');
+        Route::get('/achieve/list', 'fetchAllachieve');
     });
 
     
@@ -72,6 +75,10 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/progress/workout/unlike/{id}', 'progress_workout_unlike');       
         Route::get('/progress/workout/comments/{id}', 'progress_workout_comment');       
         Route::post('/progress/workout/comments/store', 'progress_workout_comment_store');     
+        Route::get('/progress/calender', 'ProgressCalender');     
+        Route::get('/progress/calender/like/{id?}', 'ProgressCalendeLike');     
+        Route::get('/progress/calender/unlike/{id?}', 'ProgressCalendeUnlike');     
+        
     });
 
     Route::controller(PostController::class)->group(function () {
@@ -106,7 +113,29 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('addiction/money/store' , 'addiction_money_store');
         Route::post('addiction/time/store' , 'addiction_time_store');
         Route::get('addiction/track/{type}' , 'addiction_track');
+        Route::get('addiction/reset' , 'addiction_reset');
+        Route::get('/addiction/management', 'addiction_management')->name('addiction_management');
+        Route::post('/addiction/management/store', 'addiction_management_store')->name('addiction_management.store');    
+        Route::get('/addiction/management/like/{id?}', 'AddictionManagementLikeCalender');    
+        Route::get('/addiction/management/unlike/{id?}', 'AddictionManagementUnlikeCalender');    
+        Route::get('/addiction/management/comment/{id?}', 'progress_addiction_comment');    
+        Route::post('/addiction/management/comment/store', 'progress_addiction_comment_store');    
     });
+
+    Route::controller(CommunityController::class)->group(function () { 
+        Route::get('community/list/{addiction_id?}' , 'comunity_list');
+        Route::post('community/store' , 'community_store');
+        Route::post('community/comment/store' , 'community_comment_store');
+        Route::post('reply/store' , 'reply_store');
+        Route::post('InnerReply/store' , 'inner_reply_store');
+        Route::get('InnerReply/like/{id?}' , 'InnerReply_like');
+        Route::get('InnerReply/unlike/{id?}' , 'InnerReply_unlike');
+        Route::get('comment/like/{id?}' , 'comment_like');
+        Route::get('comment/unlike/{id?}' , 'comment_unlike');
+        Route::get('reply/like/{id?}' , 'reply_like');
+        Route::get('reply/unlike/{id?}' , 'reply_unlike');
+    });
+
 
     Route::get('/', function (Request $request) {
         return response()->json(['data' => Auth::guard('sanctum')->user()], 200);

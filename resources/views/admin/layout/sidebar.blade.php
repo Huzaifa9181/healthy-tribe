@@ -15,7 +15,7 @@
                 <img src="{{ Auth::user()->image ? asset('public/' . Auth::user()->image) : url('public/admin/dist/img/user2-160x160.jpg') }}" alt="User Image" class="img-circle elevation-2">
             </div>
             <div class="info">
-                <a href="#" class="d-block">{{Auth::user()->name ?? ''}}</a>
+                <h6 class="d-block text-white">{{Auth::user()->name ?? ''}}</h6>
             </div>
         </div>
 

@@ -152,4 +152,41 @@ class ProgressController extends Controller
         return $this->successWithData($comments , 'Successfully Saved Comment For Workout.');
     }
 
+
+    public function ProgressCalender(){
+        $user = Auth::guard('sanctum')->user();
+        $records = fasting_track::select('id', 'like', 'user_id' , 'created_at')
+        ->get();
+        return $this->successWithData($records , 'Successfully Fetch Calender Details.');
+    }
+
+    public function ProgressCalendeLike($id = null){
+        if($id){
+            $records = fasting_track::find($id);
+            if($records->like == null){
+                $records->like = 1;
+            }else{
+                $records->increment('like');
+            }
+            $records->update();
+            return $this->successWithData($records->like , 'Successfully Like Progress Calender.');
+        }else{
+            return $this->successMessage('Unsuccessfully Not Like Progress Calender.');
+        }
+    }
+
+    public function ProgressCalendeUnlike($id = null){
+        if($id){
+            $records = fasting_track::find($id);
+            if($records->like > 0){
+                $records->decrement('like');         
+            }else{
+                $records->like = 0;
+            }
+            $records->update();
+            return $this->successWithData($records->like , 'Successfully Like Progress Calender.');
+        }else{
+            return $this->successMessage('Unsuccessfully Not Like Progress Calender.');
+        }
+    }
 }

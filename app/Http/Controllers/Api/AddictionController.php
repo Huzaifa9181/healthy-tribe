@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\addiction;
+use App\Models\addiction_management;
 use App\Models\addiction_recovery;
+use App\Models\comment;
 use App\Models\currency;
 use App\Models\motivation;
 use App\Models\question;
@@ -90,13 +92,16 @@ class AddictionController extends Controller
             $user = Auth::guard('sanctum')->user();
             $addiction_recovery = addiction_recovery::where('user_id', $user->id)->first();
             $date = $addiction_recovery->date .' '. $addiction_recovery->time ;
-            return $this->calculateMinutesDifference($date) ?? '';
+            $time = $this->calculateMinutesDifference($date) ?? '';
+            return $this->successWithData($time , 'Successfully Fetch Time.');
         }elseif($type === 'money' || $type === 'Money'){
             $user = Auth::guard('sanctum')->user();
             $addiction_recovery = addiction_recovery::where('user_id', $user->id)->first();
             $date = $addiction_recovery->date .' '. $addiction_recovery->time ;
-            return $this->calculateDaysDifference($date) * $addiction_recovery->money ?? '';
+            $money =  $this->calculateDaysDifference($date) * $addiction_recovery->money ?? '';
+            return $this->successWithData($money , 'Successfully Fetch Money.');
         }
+        
     }
 
     private function calculateDaysDifference($dateString) {
@@ -132,4 +137,98 @@ class AddictionController extends Controller
             return "Error: " . $e->getMessage();
         }
     }
+
+    public function addiction_reset(){
+        $user = Auth::guard('sanctum')->user();
+        $addiction_recovery = addiction_recovery::where('user_id' , $user->id)->delete();
+        return $this->successMessage('Addiction Recovery Reset Successfully.');
+    
+    }
+
+    public function addiction_management_store(Request $request){
+        $user = Auth::guard('sanctum')->user();
+        $validator = Validator::make($request->all(), [
+            'option' => 'required|string|max:255',
+            'addiction_id' => 'required',
+            'date' => 'required',
+        ]);
+    
+        if ($validator->fails()) {
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+        }
+        $addiction_management = new addiction_management();
+        $addiction_management->option = $request->option;
+        $addiction_management->option_id = $request->option_id;
+        $addiction_management->addiction_id = $request->addiction_id;
+        $addiction_management->date = $request->date;
+        $addiction_management->user_id = $user->id;
+        $addiction_management->save();
+
+        return $this->successMessage('Addiction Management Saved Successfully.');
+    }
+
+    public function addiction_management(){
+        $addiction_management = addiction_management::with('option_id:id,option')->get();
+        return $this->successWithData($addiction_management , 'Successfully Fetch All Addiction Management.');
+
+    }
+
+    public function AddictionManagementLikeCalender($id = null){
+        if($id){
+            $addiction_management = addiction_management::find($id);
+            if($addiction_management->like == null){
+                $addiction_management->like = 1;
+            }else{
+                $addiction_management->increment('like');
+            }
+            $addiction_management->update();
+            return $this->successWithData($addiction_management->like , 'Successfully Like Addiction Management Calender.');
+        }else{
+            return $this->successMessage('Unsuccessfully Not Like Progress Calender.');
+        }
+    }
+
+    public function AddictionManagementUnlikeCalender($id = null){
+        if($id){
+            $addiction_management = addiction_management::find($id);
+            if($addiction_management->like > 0){
+                $addiction_management->decrement('like');         
+            }else{
+                $addiction_management->like = 0;
+            }
+            $addiction_management->update();
+            return $this->successWithData($addiction_management->like , 'Successfully Like Addiction Management Calender.');
+        }else{
+            return $this->successMessage('Unsuccessfully Not Like Progress Calender.');
+        }
+    }
+
+    public function progress_addiction_comment($id){
+
+        if($id){
+            $comments = comment::where('addicton_management_id', $id)->get();
+            return $this->successWithData($comments , 'Successfully Fetch All Comment For Addictions.');
+        }
+    }
+
+    public function progress_addiction_comment_store(Request $request){
+        $validator = Validator::make($request->all(), [
+            'comment' => 'required',
+            'addicton_management_id' => 'required',
+        ]);
+    
+        if ($validator->fails()) {
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+        }
+
+        $user = Auth::guard('sanctum')->user();
+        $comments = new comment;
+        $comments->user_id = $user->id;
+        $comments->comment = $request->comment;
+        $comments->addicton_management_id = $request->addicton_management_id;
+        $comments->save();
+        
+        return $this->successWithData($comments , 'Successfully Saved Comment For Addiction Management.');
+    }
+
 }
