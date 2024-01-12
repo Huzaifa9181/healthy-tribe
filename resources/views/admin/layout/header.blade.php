@@ -18,4 +18,13 @@
   <!-- CodeMirror -->
   <link rel="stylesheet" href="{{url('public/admin/plugins/codemirror/codemirror.css')}}">
   <link rel="stylesheet" href="{{url('public/admin/plugins/codemirror/theme/monokai.css')}}">
+
+  {{-- favicon --}}
+  <link rel="apple-touch-icon" sizes="180x180" href="{{url('public/180x180.png')}}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{{url('public/32x32.png')}}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{{url('public/16x16.png')}}">
+  <link rel="manifest" href="/site.webmanifest">
+  <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+  <meta name="msapplication-TileColor" content="#da532c">
+  <meta name="theme-color" content="#ffffff">
 </head>
