@@ -39,9 +39,11 @@ class AuthController extends Controller
     {
         return Auth::guard('admin')->attempt(
             $request->only('email', 'password'),
-            $request->filled('remember')
+            $request->filled('remember'),
+            ['role_id' => [1, 2]] // Check for role_id 1 or 2
         );
     }
+
 
     // Logout
     public function logout()
