@@ -160,6 +160,9 @@ class MotivationController extends Controller
             $motivation = motivation::find($request->id);
     
             if ($motivation) {
+                if ($motivation->image) {
+                    Storage::disk('public')->delete($motivation->image);
+                }
                 $motivation->delete();
                 return response()->json(['message' => 'Motivation deleted successfully']);
             } else {

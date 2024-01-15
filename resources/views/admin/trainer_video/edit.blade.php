@@ -23,12 +23,10 @@
                     </div>
                     <div class="form-group col-md-6">
                       <label for="image">Video</label>
-                      <input type="file" name="video" class="form-control" style="padding: 3px !important;" id="image">
+                      <input type="file" name="video" class="form-control" style="padding: 3px !important;" id="videoInput">
+                      <video controls id="videoPlayer" style="display: none;"></video>
                     </div>
-                    <div class="form-group col-md-6">
-                        <label for="image">Duration</label>
-                        <input type="number" name="duration" class="form-control" id="exampleInputName" value="{{$data->duration ?? ''}}" placeholder="Enter Duration">
-                    </div>
+                      <input type="hidden" name="duration" class="form-control" id="duration" value="{{$data->duration ?? ''}}" >
                     <input type="hidden" name="id" value="{{$data->id}}">
                     @if($data->path)
                         <div class="form-group col-md-6">
@@ -63,5 +61,23 @@
     </div><!-- /.container-fluid -->
   </section>
   <!-- /.content -->
+  <script>
+    let videoInput = document.getElementById("videoInput");
+    let videoPlayer = document.getElementById("videoPlayer");
+    let hiddenInput = document.getElementById("duration");
 
+    videoInput.addEventListener("change", function() {
+        if (this.files && this.files[0]) {
+            let selectedVideo = this.files[0];
+            
+            // Set the selected video as the source for the video player
+            videoPlayer.src = URL.createObjectURL(selectedVideo);
+
+            // Once the video metadata is loaded, you can access its duration
+            videoPlayer.addEventListener("loadedmetadata", function() {
+              hiddenInput.value = this.duration
+            });
+        }
+    });
+</script> 
   @endsection

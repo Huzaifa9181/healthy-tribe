@@ -228,7 +228,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/plan/video/store', 'plan_video_store')->name('plan_video.store');
             Route::get('/plan/video/edit/{id}', 'plan_video_edit')->name('plan_video.edit');
             Route::post('/plan/video/update', 'plan_video_update')->name('plan_video.update');
-            // Route::post('/videos/destroy', 'destroy')->name('plan.destroy');
+            Route::post('/plan_videos/destroy', 'plan_video_destroy')->name('plan_video.destroy');
         });
 
     });

@@ -247,7 +247,7 @@ class PlanController extends Controller
             ->addColumn('action', function ($row) {
                 // Add any custom action buttons here
                 $editButton = '<a href="' . route('plan_video.edit', ['id' => $row->id]) . '" class="btn btn-info">Edit</a>';
-                $deleteButton = '<button class="btn btn-danger delete-user" data-id="' . $row->id . '" data-model="videos" data-toggle="modal" data-target="#deleteUserModal">Delete</button>';
+                $deleteButton = '<button class="btn btn-danger delete-user" data-id="' . $row->id . '" data-model="plan_videos" data-toggle="modal" data-target="#deleteUserModal">Delete</button>';
             
                 return $editButton . ' ' . $deleteButton;
             })
@@ -269,6 +269,10 @@ class PlanController extends Controller
         if ($validator->fails()) {
             return back()->with('error' , $validator->errors());
         }
+
+        $plan = plan::find($request->plan_id);
+        $plan->duration += $request->duration;
+        $plan->update();
 
         $video = new video;
         if ($request->hasFile('video')) {
@@ -302,6 +306,11 @@ class PlanController extends Controller
             return back()->with('error' , $validator->errors());
         }
 
+        $plan = plan::find($request->plan_id);
+        $plan->duration += $request->duration;
+        $plan->update();
+
+
         $video = video::find($request->id);
         if ($request->hasFile('video')) {
             $validator->addRules([
@@ -334,6 +343,39 @@ class PlanController extends Controller
         return redirect()->route('plan_video.index')->with('success', 'Plan Video updated successfully!');
 
     }
+
+    
+    public function plan_video_destroy(Request $request)
+{
+    if ($request->ajax()) {
+        $userId = $request->input('id');
+        $video = video::find($userId);
+
+        if ($video) {
+            if ($video->path) {
+                Storage::disk('public')->delete($video->path);
+            }
+            $video->delete();
+
+            // Check if the video is associated with a plan
+            if ($video->plan_id) {
+                $plan = plan::find($video->plan_id);
+                if ($plan) {
+                    // Make sure the duration is positive to avoid negative values
+                    if ($plan->duration > 0) {
+                        $plan->duration -= $video->duration;
+                        $plan->update(); // Use save() to update the plan
+                    }
+                }
+            }
+
+            return response()->json(['message' => 'Trainer video deleted successfully']);
+        } else {
+            return response()->json(['message' => 'Video not found']);
+        }
+    }
+}
+
 
     //  ------------- End Plan Video ----------------------------
    
