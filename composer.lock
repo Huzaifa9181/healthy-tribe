@@ -6744,16 +6744,16 @@
         },
         {
             "name": "twilio/sdk",
-            "version": "7.13.0",
+            "version": "7.13.1",
             "source": {
                 "type": "git",
                 "url": "git@github.com:twilio/twilio-php.git",
-                "reference": "cda27b65615ecfddce24668803078bc72b46fe17"
+                "reference": "793917ca44d40debdfb5aaf12f773cf8bff18aa7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/cda27b65615ecfddce24668803078bc72b46fe17",
-                "reference": "cda27b65615ecfddce24668803078bc72b46fe17",
+                "url": "https://api.github.com/repos/twilio/twilio-php/zipball/793917ca44d40debdfb5aaf12f773cf8bff18aa7",
+                "reference": "793917ca44d40debdfb5aaf12f773cf8bff18aa7",
                 "shasum": ""
             },
             "require": {
@@ -6789,7 +6789,7 @@
                 "sms",
                 "twilio"
             ],
-            "time": "2023-12-14T10:47:43+00:00"
+            "time": "2024-01-14T15:07:17+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
@@ -8084,16 +8084,16 @@
         },
         {
             "name": "phpunit/phpunit",
-            "version": "10.5.5",
+            "version": "10.5.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit.git",
-                "reference": "ed21115d505b4b4f7dc7b5651464e19a2c7f7856"
+                "reference": "e5c5b397a95cb0db013270a985726fcae93e61b8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/ed21115d505b4b4f7dc7b5651464e19a2c7f7856",
-                "reference": "ed21115d505b4b4f7dc7b5651464e19a2c7f7856",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit/zipball/e5c5b397a95cb0db013270a985726fcae93e61b8",
+                "reference": "e5c5b397a95cb0db013270a985726fcae93e61b8",
                 "shasum": ""
             },
             "require": {
@@ -8165,7 +8165,7 @@
             "support": {
                 "issues": "https://github.com/sebastianbergmann/phpunit/issues",
                 "security": "https://github.com/sebastianbergmann/phpunit/security/policy",
-                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.5"
+                "source": "https://github.com/sebastianbergmann/phpunit/tree/10.5.7"
             },
             "funding": [
                 {
@@ -8181,7 +8181,7 @@
                     "type": "tidelift"
                 }
             ],
-            "time": "2023-12-27T15:13:52+00:00"
+            "time": "2024-01-14T16:40:30+00:00"
         },
         {
             "name": "sebastian/cli-parser",
@@ -9315,16 +9315,16 @@
         },
         {
             "name": "spatie/laravel-ignition",
-            "version": "2.4.0",
+            "version": "2.4.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/spatie/laravel-ignition.git",
-                "reference": "b9395ba48d3f30d42092cf6ceff75ed7256cd604"
+                "reference": "005e1e7b1232f3b22d7e7be3f602693efc7dba67"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/spatie/laravel-ignition/zipball/b9395ba48d3f30d42092cf6ceff75ed7256cd604",
-                "reference": "b9395ba48d3f30d42092cf6ceff75ed7256cd604",
+                "url": "https://api.github.com/repos/spatie/laravel-ignition/zipball/005e1e7b1232f3b22d7e7be3f602693efc7dba67",
+                "reference": "005e1e7b1232f3b22d7e7be3f602693efc7dba67",
                 "shasum": ""
             },
             "require": {
@@ -9403,7 +9403,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-01-04T14:51:24+00:00"
+            "time": "2024-01-12T13:14:58+00:00"
         },
         {
             "name": "symfony/yaml",
