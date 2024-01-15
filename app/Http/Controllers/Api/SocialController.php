@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Events\chatMessage;
 use App\Events\GroupChatMessage;
+use App\Events\notification;
+use App\Models\achieve;
+use App\Models\achievement;
 use App\Models\Group;
 use App\Models\GroupMember;
 use App\Models\GroupMessage;
@@ -63,6 +66,7 @@ class SocialController extends Controller
             'another_user_id' => $request->input('another_user_id') ?? 5, 
         ]);
 
+        broadcast(new notification($request->another_user_id , 'Message' , $user->id.' Send you a message.'))->toOthers();
         // Broadcast the new chat message to the 'chat' channel
         broadcast(new chatMessage($user->id , $message))->toOthers();
 
@@ -229,6 +233,7 @@ class SocialController extends Controller
         $group = Group::find($request->group_id);
 
         broadcast(new GroupChatMessage($grpMsg, $group))->toOthers();
+
         $grpMsgs = GroupMessage::with('user_id:id,name' , 'group_id:id,name,leader_id')->where('group_id' , $request->group_id)->latest()->get();
         return $this->successWithData($grpMsgs  , 'Successfully Send Message.');
 
@@ -253,5 +258,36 @@ class SocialController extends Controller
         return $this->successWithData($data  , 'Successfully Fetch All Groups.');
     }
 
+    public function getAchievement( ){
+        $user = Auth::guard('sanctum')->user();
+        $achievement = achievement::where('user_id' , $user->id)->first();
+        return $this->successWithData($achievement  , 'Successfully Fetch Achievement.');
+    }
+
+    public function achievement_store( Request $request ){
+        $user = Auth::guard('sanctum')->user();
+
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+        }
+
+        $count = achievement::where('user_id' , $user->id)->count();
+        if($count === 0){
+            $achievement = new achievement();
+            $achievement->title = $request->title;
+            $achievement->user_id = $user->id;
+            $achievement->save();
+        }else{
+            $achievement = achievement::where('user_id' , $user->id)->first();
+            $achievement->title = $request->title;
+            $achievement->user_id = $user->id;
+            $achievement->update();
+        }
+        return $this->successMessage('Successfully Saved Achievement.');
+    }
 
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Events\notification;
 use App\Http\Controllers\Controller;
 use App\Models\comment;
 use App\Models\post;
@@ -50,11 +51,15 @@ class PostController extends Controller
         $post->user_id = $user->id;
         $post->save();
 
+        broadcast(new notification($user->id , 'Post Published' , 'Congratulation Added Post.'))->toOthers();
+
         return $this->successMessage('Post Created Successfully.');
 
     }
 
     public function post_like($id){
+        $user = Auth::guard('sanctum')->user();
+
         $post = post::find($id);
         if($post->like == null){
             $post->like = 1;
@@ -62,16 +67,19 @@ class PostController extends Controller
             $post->increment('like');
         }
         $post->update();
+        broadcast(new notification($post->user_id , 'Like' , $user->name . 'like your post.'))->toOthers();
         return $this->successWithData($post->like , 'Successfully Add Like Workout.');
     }
 
     public function post_unlike($id){
+        $user = Auth::guard('sanctum')->user();
+
         $post = post::find($id);
         if($post->like > 0){
             $post->decrement('like');         
         }
 
-        $post->update();
+        $post->update();        
         return $this->successWithData($post->like , 'Successfully Unlike Workout.');
     }
 
@@ -99,7 +107,9 @@ class PostController extends Controller
         $comments->comment = $request->comment;
         $comments->post_id = $request->post_id;
         $comments->save();
-        
+
+        $post_user_id = post::find($request->post_id)->user_id;
+        broadcast(new notification($post_user_id , 'Comment' , $user->name . 'Comment your post.'))->toOthers();
         return $this->successWithData($comments , 'Successfully Saved Comment For Post.');
     }
 
@@ -128,7 +138,8 @@ class PostController extends Controller
             }
             $story->user_id = $user->id;
             $story->save();
-            
+
+            broadcast(new notification($user->id , 'Story' , 'Story Added Successfully.'))->toOthers();
             return $this->successWithData($story , 'Successfully Story Saved.');
         }else{
             return $this->badRequestResponse('Unsuccessfully Story Limit Exceed.');
@@ -164,10 +175,15 @@ class PostController extends Controller
                 $story_like->story_id = $id;
                 $story_like->user_id = $user->id;
                 $story_like->save();
+
+                $story = story::find($id);
+                broadcast(new notification($story->user_id , 'Like' , $user->name . 'Like your post.'))->toOthers();
                 return $this->successWithData($story , 'Story Like Successfully.');
             }else{
                 $story = story::find($id);
-                $story->decrement('user_like');
+                if($story->user_like > 0){
+                    $story->decrement('user_like');         
+                }
                 $story->update();
                 $story_like = StoryLike::where('user_id' , $user->id)->where('story_id' , $id)->delete();
                 return $this->successWithData($story , 'Story Unlike Successfully.');            }

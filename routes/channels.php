@@ -22,6 +22,10 @@ Broadcast::channel('chat-message', function ($user) {
     return !is_null($user);
 });
 
+Broadcast::channel('notification.{user_id}', function ($user , $user_id) {
+    return (int) $user->id === (int) $user_id;
+});
+
 Broadcast::channel('group.{groupId}', function ($user, $groupId) {
     return $user->isMemberOfGroup($user->id ,$groupId); 
 });

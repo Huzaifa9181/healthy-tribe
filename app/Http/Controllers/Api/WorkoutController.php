@@ -19,139 +19,177 @@ class WorkoutController extends Controller
     //
     use HandleResponse;
 
-    public function getTrainers(){
+    public function getTrainers()
+    {
         // Retrieve a unique collection of user IDs from the plans
         $uniquePlanUserIds = Plan::pluck('user_id')->unique();
 
         // Retrieve the last 10 trainers who have at least one plan
         $trainers = User::whereIn('id', $uniquePlanUserIds)  // Filter users who are associated with at least one plan
-                    ->where('role_id', 2)  // Filter users who are trainers
-                    ->latest()  // Ordering by the latest first
-                    ->limit(10)  // Limiting the results to 10
-                    ->get();  // Getting the collective
+            ->where('role_id', 2)  // Filter users who are trainers
+            ->latest()  // Ordering by the latest first
+            ->limit(10)  // Limiting the results to 10
+            ->get();  // Getting the collective
 
-        return $this->successWithData($trainers , 'Successfully Fetch 10 Trainers');
+        return $this->successWithData($trainers, 'Successfully Fetch 10 Trainers');
     }
 
-    public function getCategories($id = null){
-        if($id){
-            $plan = plan::where('category_id' , $id)->pluck('id');
+    public function getCategories($id = null)
+    {
+        if ($id) {
+            $plan = plan::where('category_id', $id)->pluck('id');
             $categorie = categorie::find($id);
-            $video = video::with(['user:id,name'])->select('id' , 'title' ,  'path' , 'duration' , 'trainer_id' , 'created_at')->whereIn('plan_id' , $plan)->get();
+            $video = video::with(['user:id,name'])->select('id', 'title',  'path', 'duration', 'trainer_id', 'created_at')->whereIn('plan_id', $plan)->get();
             $data['categorie'] = $categorie;
             $data['video'] = $video;
-            return $this->successWithData($data , 'Successfully Fetch 10 Categories');
-        }else{
-            $categorie = categorie::latest()  // Ordering by the latest first
-            ->limit(10)  // Limiting the results to 10
-            ->get();  // Getting the collective;
-            return $this->successWithData($categorie , 'Successfully Fetch 10 Categories');
-        }
-    }
-
-    public function FetchAllPlans(){
-        $user = Auth::guard('sanctum')->user();
-        $lastWorkout = Workout::where('user_id', $user->id)->latest('id')->first();
-        $plan = plan::find($lastWorkout->plan_id);
-        if($plan) {
-            $plans = plan::where('user_id' , $plan->user_id)->get();
-            $data = [];
-            foreach($plans as $val){
-                $val->locked = $this->checkLocked($val->id,$user->id);
-                $data[] = $val;
-            }
-            
-        } 
-
-        return $this->successWithData($data , 'Successfully Fetch PLans');
-    }
-
-    private function checkLocked($plan_id , $user_id){
-        $lastWorkout = Workout::where('user_id', $user_id)->where('plan_id', $plan_id)->count();
-        if($lastWorkout > 0){
-            $lastWorkout = 'Unlocked';
-        }else{
-            $lastWorkout = 'Locked';
-        }
-        return $lastWorkout;
-    }
-
-
-
-    public function getPlans(){
-        $user = Auth::guard('sanctum')->user();
-        $lastWorkout = Workout::where('user_id', $user->id)->latest('id')->first();
-
-        if($lastWorkout) {
-            // Retrieve the next plan based on the plan_id from the last workout
-            $nextPlan = Plan::with('videos')->where('user_id', $lastWorkout->user_id)
-                            ->where('id', '>', $lastWorkout->plan_id)
-                            ->orderBy('id', 'asc') // Assuming plans are ordered by ID
-                            ->first(); // Get the next record
+            return $this->successWithData($data, 'Successfully Fetch 10 Categories');
         } else {
-            $nextPlan = plan::with('videos')->where('user_id' , $user->favourite_trainer)->first();
+            $categorie = categorie::latest()  // Ordering by the latest first
+                ->limit(10)  // Limiting the results to 10
+                ->get();  // Getting the collective;
+            return $this->successWithData($categorie, 'Successfully Fetch 10 Categories');
         }
-
-        return $this->successWithData($nextPlan , 'Successfully Fetch PLans');
     }
 
-    public function getVideos(){
+    public function FetchAllPlans()
+    {
         $user = Auth::guard('sanctum')->user();
         $lastWorkout = Workout::where('user_id', $user->id)->latest('id')->first();
 
-        if($lastWorkout) {
+        if ($lastWorkout) {
+            // Assuming that the plans are ordered in a way that reflects their sequence
+            $plan = Plan::find($lastWorkout->plan_id);
+            $plans = Plan::where('user_id', $plan->user_id)->get();
+
+            $data = [];
+            $unlockNext = false;
+            foreach ($plans as $plan) {
+                if ($lastWorkout && $plan->id == $lastWorkout->plan_id) {
+                    $unlockNext = true;  // The next plan should be unlocked
+                    $plan->locked = 'Unlocked';
+                } else {
+                    $plan->locked = $unlockNext ? 'Unlocked' : 'Locked';
+                    $unlockNext = false; // Reset the flag after unlocking the next plan
+                }
+                $data[] = $plan;
+            }
+        } else {
+            $plans = plan::where('user_id', $user->favourite_trainer)->get();
+
+            $data = [];
+            $unlockNext = false;
+            $first = true; // Flag to track the first plan
+
+            foreach ($plans as $plan) {
+                if ($first) {
+                    // Always unlock the first plan
+                    $plan->locked = 'Unlocked';
+                    $first = false;
+
+                    // Check if the first plan is the last completed, then unlock next
+                    if ($lastWorkout && $plan->id == $lastWorkout->plan_id) {
+                        $unlockNext = true;
+                    }
+                } else {
+                    // For subsequent plans, use the existing logic
+                    if ($unlockNext) {
+                        $plan->locked = 'Unlocked';
+                        $unlockNext = false; // Reset after unlocking
+                    } else {
+                        $plan->locked = 'Locked';
+                    }
+                }
+                $data[] = $plan;
+            }
+        }
+
+        return $this->successWithData($data, 'Successfully Fetch Plans');
+    }
+
+
+
+    public function getPlans()
+    {
+        $user = Auth::guard('sanctum')->user();
+        $lastWorkout = Workout::where('user_id', $user->id)->latest('id')->first();
+
+        if ($lastWorkout) {
+            // Retrieve the next plan based on the plan_id from the last workout
+            $plan = plan::find($lastWorkout->plan_id);
+            $nextPlan = Plan::with('videos')->where('user_id', $plan->user_id)
+                ->where('id', '>', $lastWorkout->plan_id)
+                ->orderBy('id', 'asc') // Assuming plans are ordered by ID
+                ->first(); // Get the next record
+        } else {
+            $nextPlan = plan::with('videos')->where('user_id', $user->favourite_trainer)->first();
+        }
+
+        return $this->successWithData($nextPlan, 'Successfully Fetch PLans');
+    }
+
+    public function getVideos()
+    {
+        $user = Auth::guard('sanctum')->user();
+        $lastWorkout = Workout::where('user_id', $user->id)->latest('id')->first();
+
+        if ($lastWorkout) {
             // Retrieve the next plan based on the plan_id from the last workout
             $nextPlan = Plan::where('user_id', $lastWorkout->user_id)
-                            ->where('id', '>', $lastWorkout->plan_id)
-                            ->orderBy('id', 'asc') // Assuming plans are ordered by ID
-                            ->first(); // Get the next record
+                ->where('id', '>', $lastWorkout->plan_id)
+                ->orderBy('id', 'asc') // Assuming plans are ordered by ID
+                ->first(); // Get the next record
         } else {
-            $nextPlan = plan::where('user_id' , $user->favourite_trainer)->first();
+            $nextPlan = plan::where('user_id', $user->favourite_trainer)->first();
         }
 
-        if($nextPlan){
-            $video = video::where('plan_id' , $nextPlan->id)
-            ->limit(10)  // Limiting the results to 10
-            ->get();
-        }else{
+        if ($nextPlan) {
+            $video = video::where('plan_id', $nextPlan->id)
+                ->limit(10)  // Limiting the results to 10
+                ->get();
+        } else {
             $video = video::latest()
-            ->limit(10)  // Limiting the results to 10
-            ->get();
+                ->limit(10)  // Limiting the results to 10
+                ->get();
         }
 
-        return $this->successWithData($video , 'Successfully Fetch 10 Videos');
+        return $this->successWithData($video, 'Successfully Fetch 10 Videos');
     }
 
-    public function getPlan($id){
+    public function getPlan($id)
+    {
         $plan = Plan::with('videos')->find($id);
-        return $this->successWithData($plan , 'Successfully Fetch Plan And Videos');
+        return $this->successWithData($plan, 'Successfully Fetch Plan And Videos');
     }
 
-    public function getTainerVideo(){
-        $trainer_video = User::with('videos')->where('role_id' , 2)->first();
-        return $this->successWithData($trainer_video , 'Successfully Fetch Trainer Videos');
+    public function getTainerVideo()
+    {
+        $trainer_video = User::with('videos')->where('role_id', 2)->first();
+        return $this->successWithData($trainer_video, 'Successfully Fetch Trainer Videos');
     }
 
-    public function getSpecificVideos($id){
+    public function getSpecificVideos($id)
+    {
         $video = video::find($id);
-        return $this->successWithData($video , 'Successfully Fetch Specific Video');
+        return $this->successWithData($video, 'Successfully Fetch Specific Video');
     }
 
-    public function progress_workout_store( Request $request ){
+    public function progress_workout_store(Request $request)
+    {
         $validator = Validator::make($request->all(), [
             'steps' => 'required',
             'kcal' => 'required',
             'bpm' => 'required',
             'sleep' => 'required',
+            'plan_id' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+            return $this->fail(422, "Invalid credentials", $validator->errors());
         }
 
         $user = Auth::guard('sanctum')->user();
-        $record = workout::where('user_id', $user->id)->latest('created_at')->first();
-        
+        $record = workout::where('user_id', $user->id)->where('plan_id', $request->plan_id)->latest('created_at')->first();
+
         if (!$record || Carbon::now()->diffInDays($record->created_at) >= 1) {
 
             $newRecord = new workout();
@@ -160,10 +198,10 @@ class WorkoutController extends Controller
             $newRecord->bpm = $request->bpm;
             $newRecord->sleep = $request->sleep;
             $newRecord->user_id = $user->id;
+            $newRecord->plan_id = $request->plan_id;
             $newRecord->save();
-            
-            return $this->successMessage('Workout Saved Successfully.');
 
+            return $this->successMessage('Workout Saved Successfully.');
         } else {
             $record->steps = $request->steps;
             $record->kcal = $request->kcal;
@@ -171,9 +209,8 @@ class WorkoutController extends Controller
             $record->sleep = $request->sleep;
             $record->user_id = $user->id;
             $record->update();
-        
+
             return $this->successMessage('Workout Updated Successfully.');
         }
-        
     }
 }

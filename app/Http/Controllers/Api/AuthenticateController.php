@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\achievement;
+use App\Models\contents;
 use App\Models\language;
 use App\Models\notification;
 use Illuminate\Http\Request;
@@ -358,5 +359,11 @@ class AuthenticateController extends Controller
         $user->achievement = $request->achievement;
         $user->update();
         return $this->successMessage('Profile Updated Successfully.');
+    }
+
+    public function content(){
+        $contents = contents::latest()->first();
+        return $this->successWithData($contents , 'Fetch Terms of Services.');
+
     }
 }

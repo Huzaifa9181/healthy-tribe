@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AchieveController;
 use App\Http\Controllers\Admin\AddictionController;
+use App\Http\Controllers\Admin\AddictionOptionController;
 use App\Http\Controllers\Admin\ArticleController;
 use App\Http\Controllers\Admin\ChallengeController;
 use App\Http\Controllers\Admin\WorkoutCatController;
@@ -41,11 +42,13 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         Route::get('/home', 'HomeController@index');
 
         // Admin
-        Route::resource('admins', 'AdminController');
-        Route::get('/admins/{id}/edit', 'AdminController@edit')->name('admin.edit');
-        Route::post('/admins/update/{id}', 'AdminController@update')->name('admin.update');
-        Route::get('/getAdmin', 'AdminController@getAdmin')->name('admin.getAdmin');
-        Route::get('/admins', 'AdminController@index')->name('admin.index');
+        Route::middleware('role')->group(function () {
+            Route::resource('admins', 'AdminController');
+            Route::get('/admins/{id}/edit', 'AdminController@edit')->name('admin.edit');
+            Route::post('/admins/update/{id}', 'AdminController@update')->name('admin.update');
+            Route::get('/getAdmin', 'AdminController@getAdmin')->name('admin.getAdmin');
+            Route::get('/admins', 'AdminController@index')->name('admin.index');
+        });
 
         //Users
         Route::resource('users', 'UserController');
@@ -60,19 +63,21 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         Route::post('/trainer/profile/update', 'UserController@trainer_profile_update')->name('trainer.profile_update');
 
         //Subscription
-        Route::resource('subscription', 'SubscriptionController');
-        Route::get('/getSubscription', 'SubscriptionController@getSubscription')->name('subscription.getSubscription');
-        Route::get('/subscription', 'SubscriptionController@index')->name('subscription.index');
-        Route::get('/subscription/create', 'SubscriptionController@create')->name('subscription.create');
-        Route::get('/subscription/edit/{id}', 'SubscriptionController@edit')->name('subscription.edit');
-        Route::post('/subscription/store', 'SubscriptionController@store')->name('subscription.store');
-        Route::post('/subscription/update', 'SubscriptionController@update')->name('subscription.update');
-        Route::post('/subscription/destroy', 'SubscriptionController@destroy')->name('subscription.destroy');
+        Route::middleware('role')->group(function () {
+            Route::resource('subscription', 'SubscriptionController');
+            Route::get('/getSubscription', 'SubscriptionController@getSubscription')->name('subscription.getSubscription');
+            Route::get('/subscription', 'SubscriptionController@index')->name('subscription.index');
+            Route::get('/subscription/create', 'SubscriptionController@create')->name('subscription.create');
+            Route::get('/subscription/edit/{id}', 'SubscriptionController@edit')->name('subscription.edit');
+            Route::post('/subscription/store', 'SubscriptionController@store')->name('subscription.store');
+            Route::post('/subscription/update', 'SubscriptionController@update')->name('subscription.update');
+            Route::post('/subscription/destroy', 'SubscriptionController@destroy')->name('subscription.destroy');
 
-        //App Content
-        Route::resource('content', 'ContentController');
-        Route::get('/content', 'ContentController@index')->name('content.index');
-        Route::post('/content/update', 'ContentController@update')->name('content.update');
+            //App Content
+            Route::resource('content', 'ContentController');
+            Route::get('/content', 'ContentController@index')->name('content.index');
+            Route::post('/content/update', 'ContentController@update')->name('content.update');
+        });
 
         //Workout Categories
         Route::resource('workout_cat', 'WorkoutCatController');
@@ -97,7 +102,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/videos/destroy', 'video_destroy')->name('trainer_video.destroy');
         });
 
-        Route::controller(ChallengeController::class)->group(function () {
+        Route::controller(ChallengeController::class)->middleware('role')->group(function () {
             Route::get('/challenge', 'index')->name('challenge.index');
             Route::get('/challenge/getData', 'getData')->name('challenge.show');
             Route::get('/challenge/create', 'create')->name('challenge.create');
@@ -107,7 +112,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/challenges/destroy', 'destroy')->name('trainer_video.destroy');
         });
 
-        Route::controller(QuestionController::class)->group(function () {
+        Route::controller(QuestionController::class)->middleware('role')->group(function () {
             Route::get('/question', 'index')->name('question.index');
             Route::get('/question/getData', 'getData')->name('question.show');
             Route::get('/question/create', 'create')->name('question.create');
@@ -117,7 +122,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/question/destroy', 'destroy')->name('question.destroy');
         });
 
-        Route::controller(AddictionController::class)->group(function () {
+        Route::controller(AddictionController::class)->middleware('role')->group(function () {
             Route::get('/addiction', 'index')->name('addiction.index');
             Route::get('/addiction/getData', 'getData')->name('addiction.show');
             Route::get('/addiction/create', 'create')->name('addiction.create');
@@ -127,7 +132,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/addiction/destroy', 'destroy')->name('addiction.destroy');
         });
 
-        Route::controller(ArticleController::class)->group(function () {
+        Route::controller(ArticleController::class)->middleware('role')->group(function () {
             Route::get('/article', 'index')->name('article.index');
             Route::get('/article/getData', 'getData')->name('article.show');
             Route::get('/article/create', 'create')->name('article.create');
@@ -137,7 +142,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/articles/destroy', 'destroy')->name('article.destroy');
         });
 
-        Route::controller(ResourceTrainingController::class)->group(function () {
+        Route::controller(ResourceTrainingController::class)->middleware('role')->group(function () {
             Route::get('/resource/training', 'index')->name('resource_training.index');
             Route::get('/resource/training/getData', 'getData')->name('resource_training.show');
             Route::get('/resource/training/create', 'create')->name('resource_training.create');
@@ -147,7 +152,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/resource/training/destroy', 'destroy')->name('resource_training.destroy');
         });
 
-        Route::controller(GroupController::class)->group(function () {
+        Route::controller(GroupController::class)->middleware('role')->group(function () {
             Route::get('/group', 'index')->name('group.index');
             Route::get('/group/getData', 'getData')->name('group.show');
             Route::get('/group/create', 'create')->name('group.create');
@@ -157,7 +162,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/group/destroy', 'destroy')->name('group.destroy');
         });
 
-        Route::controller(MotivationController::class)->group(function () {
+        Route::controller(MotivationController::class)->middleware('role')->group(function () {
             Route::get('/motivation', 'index')->name('motivation.index');
             Route::get('/motivation/getData', 'getData')->name('motivation.show');
             Route::get('/motivation/create', 'create')->name('motivation.create');
@@ -167,7 +172,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/motivation/destroy', 'destroy')->name('motivation.destroy');
         });
 
-        Route::controller(GeneralSettingController::class)->group(function () {
+        Route::controller(GeneralSettingController::class)->middleware('role')->group(function () {
             Route::get('/general/setting', 'index')->name('general_setting.index');
             Route::get('/general/setting/getData', 'getData')->name('general_setting.show');
             Route::get('/general/setting/create', 'create')->name('general_setting.create');
@@ -178,7 +183,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         });
 
 
-        Route::controller(CurrencyController::class)->group(function () {
+        Route::controller(CurrencyController::class)->middleware('role')->group(function () {
             Route::get('/currency', 'index')->name('currency.index');
             Route::get('/currency/getData', 'getData')->name('currency.show');
             Route::get('/currency/create', 'create')->name('currency.create');
@@ -188,7 +193,7 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/currency/destroy', 'destroy')->name('currency.destroy');
         });
 
-        Route::controller(AchieveController::class)->group(function () {
+        Route::controller(AchieveController::class)->middleware('role')->group(function () {
             Route::get('/achieve', 'index')->name('achieve.index');
             Route::get('/achieve/getData', 'getData')->name('achieve.show');
             Route::get('/achieve/create', 'create')->name('achieve.create');
@@ -196,6 +201,16 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
             Route::post('/achieve/update', 'update')->name('achieve.update');
             Route::get('/achieve/edit/{id}', 'edit')->name('achieve.edit');
             Route::post('/achieve/destroy', 'destroy')->name('achieve.destroy');
+        });
+
+        Route::controller(AddictionOptionController::class)->middleware('role')->group(function () {
+            Route::get('/addiction/option', 'index')->name('addiction_option.index');
+            Route::get('/addiction/option/getData', 'getData')->name('addiction_option.show');
+            Route::get('/addiction/option/create', 'create')->name('addiction_option.create');
+            Route::post('/addiction/option/store', 'store')->name('addiction_option.store');
+            Route::post('/addiction/option/update', 'update')->name('addiction_option.update');
+            Route::get('/addiction/option/edit/{id}', 'edit')->name('addiction_option.edit');
+            Route::post('/addiction/option/destroy', 'destroy')->name('addiction_option.destroy');
         });
 
         Route::controller(PlanController::class)->group(function () {

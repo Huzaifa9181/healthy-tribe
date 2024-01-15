@@ -252,7 +252,7 @@
                     </li>
                     <li class="nav-item {{ request()->routeIs('addiction.*') ? 'menu-open' : '' }}">
                         <a href="#" class="nav-link {{ request()->routeIs('addiction.*') ? 'active' : '' }}">
-                            <i class="nav-icon fas fa-dumbbell"></i>
+                            <i class="nav-icon fas fa-syringe"></i>
                             <p>
                                 Addictions
                                 <i class="right fas fa-angle-left"></i>
@@ -269,6 +269,32 @@
                             <li class="nav-item">
                                 <a href="{{ route('addiction.create') }}"
                                     class="nav-link {{ request()->routeIs('addiction.create') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>Create</p>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('addiction_option.*') ? 'menu-open' : '' }}">
+                        <a href="#"
+                            class="nav-link {{ request()->routeIs('addiction_option.*') ? 'active' : '' }}">
+                            <i class="nav-icon fas fa-syringe"></i>
+                            <p>
+                                Addiction Type Option
+                                <i class="right fas fa-angle-left"></i>
+                            </p>
+                        </a>
+                        <ul class="nav nav-treeview">
+                            <li class="nav-item">
+                                <a href="{{ route('addiction_option.index') }}"
+                                    class="nav-link {{ request()->routeIs('addiction_option.index') ? 'active' : '' }}">
+                                    <i class="far fa-circle nav-icon"></i>
+                                    <p>List</p>
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="{{ route('addiction_option.create') }}"
+                                    class="nav-link {{ request()->routeIs('addiction_option.create') ? 'active' : '' }}">
                                     <i class="far fa-circle nav-icon"></i>
                                     <p>Create</p>
                                 </a>
@@ -469,6 +495,7 @@
                             </li>
                         </ul>
                     </li>
+                    
                     <li class="nav-item {{ request()->routeIs('general_setting.*') ? 'menu-open' : '' }}">
                         <a href="#"
                             class="nav-link {{ request()->routeIs('general_setting.*') ? 'active' : '' }}">

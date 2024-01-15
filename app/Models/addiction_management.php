@@ -13,4 +13,14 @@ class addiction_management extends Model
         return $this->hasOne(addiction_type_option::class , 'id' , 'option_id');
 
     }
+
+    public function user_id()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
+
+    public function addiction_id()
+    {
+        return $this->belongsTo(addiction::class, 'addiction_id');
+    }
 }

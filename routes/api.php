@@ -32,6 +32,7 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('/profile/update', 'profile_update');
         Route::get('/profile/notification/{status}', 'notification');
         Route::get('/profile/languages', 'languages');
+        Route::get('/profile/content', 'content');
         Route::post('/forgotpassword', 'forgotPassword');
         Route::post('/verifyPin', 'verifyPin');
         Route::post('/passwordChanged', 'passwordChanged');
@@ -89,7 +90,7 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('/post/comments/store', 'post_comment_store');     
         Route::post('/story/store', 'story_store');     
         Route::get('/story/fetch/{id?}', 'story_fetch');     
-        Route::get('/story/like/{id?}/{status?}', 'story_like');     
+        Route::get('/story/{id?}/{status?}', 'story_like');     
     });
 
     Route::controller(SocialController::class)->group(function () {
@@ -102,6 +103,9 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('/group/SendGroupMessage', 'SendGroupMessage');
         Route::get('/group/fetchChat/{id?}', 'group_fetchChat');
         Route::post('/Agent/sendMessage', 'AgentsendMessage');
+        Route::post('/Agent/sendMessage', 'AgentsendMessage');
+        Route::get('/achievement', 'getAchievement');
+        Route::post('/achievement/store', 'achievement_store');
     });
 
     Route::controller(AddictionController::class)->group(function () {
@@ -114,8 +118,8 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('addiction/time/store' , 'addiction_time_store');
         Route::get('addiction/track/{type}' , 'addiction_track');
         Route::get('addiction/reset' , 'addiction_reset');
-        Route::get('/addiction/management', 'addiction_management')->name('addiction_management');
-        Route::post('/addiction/management/store', 'addiction_management_store')->name('addiction_management.store');    
+        Route::get('/addiction/management/calender/{id}', 'progress_addiction_calender');
+        Route::post('/addiction/management/store', 'addiction_management_store');
         Route::get('/addiction/management/like/{id?}', 'AddictionManagementLikeCalender');    
         Route::get('/addiction/management/unlike/{id?}', 'AddictionManagementUnlikeCalender');    
         Route::get('/addiction/management/comment/{id?}', 'progress_addiction_comment');    
