@@ -23,11 +23,11 @@
                                 <input type="text" name="title" required class="form-control" id="exampleInputName"
                                     placeholder="Enter Title">
                             </div>
-                            <div class="form-group col-md-6">
+                            {{-- <div class="form-group col-md-6">
                                 <label for="image">Duration</label>
                                 <input type="number" name="duration" required class="form-control" id="exampleInputName"
                                     placeholder="Enter Duration">
-                            </div>
+                            </div> --}}
                             <div class="form-group col-md-6">
                                 <label for="image">Cal</label>
                                 <input type="number" name="cal" required class="form-control" id="exampleInputName"

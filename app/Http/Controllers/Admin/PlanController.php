@@ -84,7 +84,7 @@ class PlanController extends Controller
     public function plan_store (Request $request) {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'duration' => 'required',
+            // 'duration' => 'required',
             'cal' => 'required',
             'category_id' => 'required',
             'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
@@ -120,7 +120,7 @@ class PlanController extends Controller
         $plan->title = $request->title;
         $plan->cal = $request->cal;
         $plan->category_id = $request->category_id;
-        $plan->duration = $request->duration;
+        // $plan->duration = $request->duration;
         $plan->save();
 
         return redirect()->route('plan.index')->with('success', 'Plan saved successfully!');
@@ -131,7 +131,7 @@ class PlanController extends Controller
     public function plan_update (Request $request) {
         $validator = Validator::make($request->all(), [
             'title' => 'required',
-            'duration' => 'required',
+            // 'duration' => 'required',
             'cal' => 'required',
             'category_id' => 'required',
             'id' => 'required',
@@ -193,7 +193,7 @@ class PlanController extends Controller
         $plan->title = $request->title;
         $plan->cal = $request->cal;
         $plan->category_id = $request->category_id;
-        $plan->duration = $request->duration;
+        // $plan->duration = $request->duration;
         $plan->update();
 
         return redirect()->route('plan.index')->with('success', 'Plan updated successfully!');

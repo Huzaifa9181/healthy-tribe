@@ -11,7 +11,7 @@ use Yajra\DataTables\DataTables;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Validator;
-
+use Illuminate\Support\Facades\DB;
 class ResourceTrainingController extends Controller
 {
     public function getData(Request $request)
@@ -142,65 +142,62 @@ class ResourceTrainingController extends Controller
         $validator = Validator::make($request->all(), [
             'id' => 'required',
             'addiction_id' => 'required',
+            'pdf' => $request->hasFile('pdf') ? 'file|mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,txt|max:10000' : '',
+            'video' => $request->hasFile('video') ? 'file|mimes:mp4|max:20480' : '',
         ]);
-
+    
         if ($validator->fails()) {
-            return back()->with('error' , $validator->errors());
+            return back()->with('error', $validator->errors());
         }
-
+    
         $resource_training = resource_training::find($request->id);
-        if ($request->hasFile('pdf')) {
-            $validator->addRules([
-                'pdf' => 'required|file|mimes:pdf',
-            ]);
-            
-            if ($validator->fails()) {
-                return back()->with('error' , $validator->errors());
+        DB::beginTransaction();
+    
+        try {
+            // Handling PDF file upload
+            if ($request->hasFile('pdf')) {
+                if ($resource_training->pdf) {
+                    Storage::disk('public')->delete($resource_training->pdf);
+                }
+                $pdf = $request->file('pdf');
+                $filename = time() . '.' . $pdf->getClientOriginalExtension();
+                
+                // Store the file in the public folder
+                $pdf->move(public_path('assets/resource_training_pdf'), $filename);
+    
+                // Set the relative image path in the meal model
+                $resource_training->pdf = 'assets/resource_training_pdf/' . $filename;
+            }elseif ($request->has('hidden_pdf')) {
+                $resource_training->pdf = $request->input('hidden_image');
             }
-            if ($resource_training->pdf) {
-                Storage::disk('public')->delete($resource_training->pdf);
-            }
-            $pdf = $request->file('pdf');
-            $filename = time() . '.' . $pdf->getClientOriginalExtension();
-            
-            // Store the file in the public folder
-            $pdf->move(public_path('assets/resource_training_pdf'), $filename);
 
-            // Set the relative image path in the meal model
-            $resource_training->pdf = 'assets/resource_training_pdf/' . $filename;
-        }elseif ($request->has('hidden_pdf')) {
-            $resource_training->pdf = $request->input('hidden_image');
+            if ($request->hasFile('video')) {
+                if ($resource_training->video) {
+                    Storage::disk('public')->delete($resource_training->video);
+                }
+                $videos = $request->file('video');
+                $filename = time() . '.' . $videos->getClientOriginalExtension();
+                
+                // Store the file in the public folder
+                $videos->move(public_path('assets/resource_training_video'), $filename);
+    
+                // Set the relative image path in the meal model
+                $resource_training->video = 'assets/resource_training_video/' . $filename;
+            }elseif ($request->has('hidden_video')) {
+                $resource_training->video = $request->input('hidden_video');
+            }
+    
+            $resource_training->addiction_id = $request->addiction_id;
+            $resource_training->update();
+            
+            DB::commit();
+            return redirect()->route('resource_training.index')->with('success', 'Resource Training updated successfully!');
+        } catch (\Exception $e) {
+            DB::rollback();
+            return back()->with('error', 'An error occurred while updating the resource training.');
         }
-
-        if ($request->hasFile('video')) {
-            $validator->addRules([
-                'video' => 'required|file|mimes:mp4|max:20480', 
-            ]);
-            
-            if ($validator->fails()) {
-                return back()->with('error' , $validator->errors());
-            }
-            if ($resource_training->video) {
-                Storage::disk('public')->delete($resource_training->video);
-            }
-            $videos = $request->file('video');
-            $filename = time() . '.' . $videos->getClientOriginalExtension();
-            
-            // Store the file in the public folder
-            $videos->move(public_path('assets/resource_training_video'), $filename);
-
-            // Set the relative image path in the meal model
-            $resource_training->video = 'assets/resource_training_video/' . $filename;
-        }elseif ($request->has('hidden_video')) {
-            $resource_training->video = $request->input('hidden_video');
-        }
-
-        $resource_training->addiction_id = $request->addiction_id;
-        $resource_training->update();
-
-        return redirect()->route('resource_training.index')->with('success', 'Resource Training created successfully!');
     }
-
+    
     /**
      * Remove the specified resource from storage.
      */

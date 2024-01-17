@@ -19,13 +19,7 @@ class CommunityController extends Controller
     //
     public function comunity_list($addiction_id = null){
         if($addiction_id){
-            $data = community::with('comment:id,comment,user_id,community_id,like' , 'comment.user_id:id,name' , 'comment.reply' , 'comment.reply.user_id:id,name' , 'comment.reply.InnerReply' , 'user_id:id,name' , 'addiction_id:id,name')->where('addiction_id' , $addiction_id)->get();
-            // $ids = community::with('user_id:id,name' , 'addiction_id:id,name')->where('addiction_id' , $addiction_id)->pluck('id');
-            // foreach($ids as $val){
-            //     $data['community'] = community::with('user_id:id,name' , 'addiction_id:id,name')->find($val);
-            //     $data['comment'] = comment::with('reply' , 'reply.user_id:id,name' , 'user_id:id,name')->select('id' , 'comment' , 'user_id' , 'community_id','like')->where('community_id' , $data['community']->id)->first();
-
-            // }
+            $data = community::with('comment:id,comment,user_id,community_id,like' , 'comment.user_id:id,name' , 'comment.reply' , 'comment.reply.user_id:id,name' , 'comment.reply.InnerReply',  'comment.reply.InnerReply.UnderInnerReply' , 'user_id:id,name' , 'addiction_id:id,name')->where('addiction_id' , $addiction_id)->get();
             return $this->successWithData($data , 'Successfully Fetch All Commmunity.');
         }
     }

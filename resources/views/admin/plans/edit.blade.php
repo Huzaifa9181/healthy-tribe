@@ -23,11 +23,11 @@
                                 <input type="text" name="title" required class="form-control" id="exampleInputName"
                                     placeholder="Enter Title" value="{{$data->Title ?? ''}}">
                             </div>
-                            <div class="form-group col-md-6">
+                            {{-- <div class="form-group col-md-6">
                                 <label for="image">Duration</label>
                                 <input type="number" name="duration" required class="form-control" value="{{$data->duration ?? ''}}" id="exampleInputName"
                                     placeholder="Enter Duration">
-                            </div>
+                            </div> --}}
                             <div class="form-group col-md-6">
                                 <label for="image">Cal</label>
                                 <input type="number" name="cal" required class="form-control" value="{{$data->cal ?? ''}}" id="exampleInputName"
@@ -75,7 +75,7 @@
                             <input type="hidden" name="hidden_thumbnail_image" value="{{ $data->thumbnail ?? '' }}">
                         </div>
                         <div class="card-footer">
-                            <button type="submit" class="btn btn-primary">Create</button>
+                            <button type="submit" class="btn btn-primary">Update</button>
                         </div>
                     </form>
                 </div>

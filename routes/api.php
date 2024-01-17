@@ -111,6 +111,7 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
     Route::controller(AddictionController::class)->group(function () {
         Route::get('addiction/type/{id?}' , 'addiction_type');
         Route::get('addiction/question/{id}' , 'addiction_question');
+        Route::post('addiction/question/store' , 'addiction_question_store');
         Route::get('currency/list' , 'currency_list');
         Route::get('motivation/list' , 'motivate_list');
         Route::get('resource/training/{id}' , 'resource_training');

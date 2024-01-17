@@ -37,6 +37,23 @@ class AddictionController extends Controller
         return $this->successWithData($question, 'Successfully Fetch All Question');
     }
 
+    public function addiction_question_store ( Request $request ){
+        $validator = Validator::make($request->all(), [
+            'answer' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return $this->fail(422, "Invalid credentials", $validator->errors());
+        }
+        $user = Auth::guard('sanctum')->user();
+
+        $question = addiction_recovery::where('user_id' , $user->id)->first();
+        $question->answer = json_encode($request->answer);
+        $question->update();
+        return $this->successMessage( 'Successfully Store Addiction Answer.');
+
+    }
+
     public function currency_list()
     {
         $currency = currency::all();

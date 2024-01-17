@@ -45,10 +45,10 @@
 <!-- Summernote -->
 <script src="{{ url('public/admin/plugins/summernote/summernote-bs4.min.js') }}"></script>
 <!-- CodeMirror -->
-<script src="{{ url('public/admin/plugins/codemirror/codemirror.js') }}"></script>
+{{-- <script src="{{ url('public/admin/plugins/codemirror/codemirror.js') }}"></script>
 <script src="{{ url('public/admin/plugins/codemirror/mode/css/css.js') }}"></script>
 <script src="{{ url('public/admin/plugins/codemirror/mode/xml/xml.js') }}"></script>
-<script src="{{ url('public/admin/plugins/codemirror/mode/htmlmixed/htmlmixed.js') }}"></script>
+<script src="{{ url('public/admin/plugins/codemirror/mode/htmlmixed/htmlmixed.js') }}"></script> --}}
 <!-- AdminLTE for demo purposes -->
 <script src="{{ url('public/admin/dist/js/demo.js') }}"></script>
 <!-- Custom js -->

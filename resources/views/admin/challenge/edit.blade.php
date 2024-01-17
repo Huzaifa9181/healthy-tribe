@@ -28,7 +28,7 @@
                   <input type="hidden" name="id" value="{{$data->id}}">
                   <div class="form-group col-md-6">
                     <label for="exampleInputName">Days</label>
-                    <input type="text" name="days" class="form-control" required  id="exampleInputName" placeholder="Enter Days">
+                    <input type="text" name="days" class="form-control" value="{{$data->days}}" required  id="exampleInputName" placeholder="Enter Days">
                 </div>
                     <div class="form-group col-md-6">
                       <label for="image">Image</label>
