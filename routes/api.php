@@ -24,6 +24,14 @@ use Illuminate\Support\Facades\Auth;
 |
 */
 
+Route::controller(AuthenticateController::class)->prefix('user')->group(function () {
+    Route::post('/forgotpassword', 'forgotPassword');
+    Route::post('/verifyPin', 'verifyPin');
+    Route::post('/passwordChanged', 'passwordChanged');
+    Route::post('/sendTextMessage', 'sendTextMessage');
+});
+
+
 
 Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
     Route::controller(AuthenticateController::class)->group(function () {
@@ -33,10 +41,6 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/profile/notification/{status}', 'notification');
         Route::get('/profile/languages', 'languages');
         Route::get('/profile/content', 'content');
-        Route::post('/forgotpassword', 'forgotPassword');
-        Route::post('/verifyPin', 'verifyPin');
-        Route::post('/passwordChanged', 'passwordChanged');
-        Route::post('/sendTextMessage', 'sendTextMessage');
     });
 
     Route::controller(WorkoutController::class)->group(function () {
