@@ -42,9 +42,10 @@ class AuthenticateController extends Controller
 
             // Check if the user has the "staff" role
             if ($user->role_id === 3) {
+                $profile_update = $user->profile_update;
                 $token = $user->createToken('MyApp')->plainTextToken;
                 $user= User::where('email' , $request->email)->update(['remember_token' => $token]);
-                return $this->successWithData($token , "access token" , 200 );
+                return $this->successWithData(['token' => $token , 'profile' => $profile_update] , "access token" , 200 );
             }
         }
 
@@ -120,6 +121,7 @@ class AuthenticateController extends Controller
         $user->sleep_quality = $request->sleep_quality;
         $user->goal = $request->goal;
         $user->favourite_trainer = $request->favourite_trainer;
+        $user->profile_update = 1;
         $user->update();
         return $this->successMessage('Profile Created Successfully');
     }
