@@ -564,7 +564,7 @@
                                                                     <td style="padding-right: 0px;padding-left: 0px;"
                                                                         align="center">
                                                                         <img align="center" border="0"
-                                                                            src="https://sidtechno.com/wp-content/uploads/2023/06/Png-Logo.png"
+                                                                            src="{{url('public/180x180.png')}}"
                                                                             alt="image" title="image"
                                                                             style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: inline-block !important;border: none;height: auto;float: none;width: 100%;max-width: 149px;"
                                                                             width="149"
