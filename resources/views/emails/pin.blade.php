@@ -345,14 +345,6 @@
                                                         <td class="v-container-padding-padding"
                                                             style="overflow-wrap:break-word;word-break:break-word;padding:30px 10px 40px;font-family:'Raleway',sans-serif;"
                                                             align="left">
-                                                            <div align="center">
-                                                                <p>This PIN will expire in 60 seconds.</p>
-                                                                <span
-                                                                    style="display:block;padding:10px 20px;line-height:120%;"><span
-                                                                        style="line-height: 16.8px;">Reset Your
-                                                                        Password</span></span>
-                                                                </a>
-                                                            </div>
                                                         </td>
                                                     </tr>
                                                 </tbody>
