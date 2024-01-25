@@ -402,7 +402,7 @@
                                                                             <tr style="vertical-align: top">
                                                                                 <td align="left" valign="middle"
                                                                                     style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                                                                    <a href="https://www.facebook.com"
+                                                                                    <a href="{{ generalSetting()->facebook ?? 'https://www.facebook.com' }}"
                                                                                         title="Facebook"
                                                                                         target="_blank">
                                                                                         <img src="{{ url('/') }}/public/assets/email_images/image-1.png"
@@ -426,7 +426,7 @@
                                                                             <tr style="vertical-align: top">
                                                                                 <td align="left" valign="middle"
                                                                                     style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                                                                    <a href="https://twitter.com"
+                                                                                    <a href="{{ generalSetting()->twitter ?? 'https://twitter.com/' }}"
                                                                                         title="Twitter"
                                                                                         target="_blank">
                                                                                         <img src="{{ url('/') }}/public/assets/email_images/image-4.png"
@@ -450,7 +450,7 @@
                                                                             <tr style="vertical-align: top">
                                                                                 <td align="left" valign="middle"
                                                                                     style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                                                                    <a href="https://www.linkedin.com"
+                                                                                    <a href="{{ generalSetting()->linkedin ?? 'https://www.linkedin.com' }}"
                                                                                         title="LinkedIn"
                                                                                         target="_blank">
                                                                                         <img src="{{ url('/') }}/public/assets/email_images/image-3.png"
@@ -474,7 +474,7 @@
                                                                             <tr style="vertical-align: top">
                                                                                 <td align="left" valign="middle"
                                                                                     style="word-break: break-word;border-collapse: collapse !important;vertical-align: top">
-                                                                                    <a href="https://www.instagram.com"
+                                                                                    <a href="{{ generalSetting()->instagram ?? 'https://www.instagram.com' }}"
                                                                                         title="Instagram"
                                                                                         target="_blank">
                                                                                         <img src="{{ url('/') }}/public/assets/email_images/image-6.png"

@@ -238,7 +238,6 @@ class AuthenticateController extends Controller
                 $message->to($email)->subject('Your Password Reset PIN');
             });
         } catch (\Exception $e) {
-            // Handle the exception or log it
             return $this->fail( 500 ,"Internal Server Error", 'Failed to send the PIN. Please try again.');
         }
 
