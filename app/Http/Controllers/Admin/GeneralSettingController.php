@@ -130,6 +130,10 @@ class GeneralSettingController extends Controller
                 $general_setting->logo = $request->input('hidden_image');
             }
             $general_setting->title = $request->title;
+            $general_setting->facebook = $request->facebook;
+            $general_setting->instagram = $request->instagram;
+            $general_setting->twitter = $request->twitter;
+            $general_setting->linkedin = $request->linkedin;
             $general_setting->update();
         }else{
             $general_setting = new general_setting();
@@ -144,6 +148,10 @@ class GeneralSettingController extends Controller
                 $general_setting->logo = 'assets/logo/' . $filename;
             }
             $general_setting->title = $request->title;
+            $general_setting->facebook = $request->facebook;
+            $general_setting->instagram = $request->instagram;
+            $general_setting->twitter = $request->twitter;
+            $general_setting->linkedin = $request->linkedin;
             $general_setting->save();
 
         }
