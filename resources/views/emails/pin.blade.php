@@ -274,7 +274,7 @@
                                                             <h1 class="v-font-size"
                                                                 style="margin: 0px; line-height: 140%; text-align: left; word-wrap: break-word; font-size: 16px; font-weight: 400;">
                                                                 If you've lost your password or wish to reset it, use
-                                                                the link below to get started:</h1>
+                                                                this otp to rest you password:</h1>
                                                         </td>
                                                     </tr>
                                                 </tbody>
