@@ -19,17 +19,33 @@
                 <div class="card-body row" >
                     <div class="form-group col-md-6">
                         <label for="exampleInputName">Title</label>
-                        <input type="text" name="title" class="form-control" required  id="exampleInputName" placeholder="Enter Title" value="{{$data->title}}">
+                        <input type="text" name="title" class="form-control" required  id="exampleInputName" placeholder="Enter Title" value="{{$data->title ?? ''}}">
                     </div>
-                  <input type="hidden" name="id" value="{{$data->id}}">
                     <div class="form-group col-md-6">
                       <label for="logo">Logo</label>
                       <input type="file" name="image" class="form-control"  style="padding: 3px !important;" id="logo">
                     </div>
-                    @if($data->logo)
+                    <div class="form-group col-md-12 text-center"><h3><b>Socials Link</b></h3></div>
+                    <div class="form-group col-md-6">
+                      <label for="exampleInputName">Facebook</label>
+                      <input type="text" name="facebook" class="form-control" required  id="exampleInputName" placeholder="Enter Your Facebook Account" value="{{$data->facebook ?? ''}}">
+                  </div>
+                  <div class="form-group col-md-6">
+                    <label for="exampleInputName">Twitter</label>
+                    <input type="text" name="twitter" class="form-control" required  id="exampleInputName" placeholder="Enter Your Twitter Account" value="{{$data->twitter ?? ''}}">
+                </div>
+                <div class="form-group col-md-6">
+                  <label for="exampleInputName">Instagram</label>
+                  <input type="text" name="instagram" class="form-control" required  id="exampleInputName" placeholder="Enter Your Instagram Account" value="{{$data->instagram ?? ''}}">
+              </div>
+              <div class="form-group col-md-6">
+                <label for="exampleInputName">Linkedin</label>
+                <input type="text" name="linkedin" class="form-control" required  id="exampleInputName" placeholder="Enter Your Linkedin Account" value="{{$data->linkedin ?? ''}}">
+            </div>
+                    @if($data->logo ?? '')
                         <div class="form-group col-md-6">
                             <strong>Current Logo:</strong><br>
-                            <img src="{{ asset('public/'.$data->logo) }}" alt="Logo" style="max-width: 200px;">
+                            <img src="{{ asset('public/'.$data->logo ?? '') }}" alt="Logo" style="max-width: 200px;">
                         </div>
                     @endif
                     <input type="hidden" name="hidden_image" value="{{ $data->logo ?? '' }}">

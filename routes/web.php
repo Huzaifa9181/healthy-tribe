@@ -173,13 +173,13 @@ Route::prefix('admin')->namespace('App\Http\Controllers\Admin')
         });
 
         Route::controller(GeneralSettingController::class)->middleware('role')->group(function () {
-            Route::get('/general/setting', 'index')->name('general_setting.index');
-            Route::get('/general/setting/getData', 'getData')->name('general_setting.show');
-            Route::get('/general/setting/create', 'create')->name('general_setting.create');
-            Route::post('/general/setting/store', 'store')->name('general_setting.store');
+            // Route::get('/general/setting', 'index')->name('general_setting.index');
+            // Route::get('/general/setting/getData', 'getData')->name('general_setting.show');
+            // Route::get('/general/setting/create', 'create')->name('general_setting.create');
+            // Route::post('/general/setting/store', 'store')->name('general_setting.store');
+            Route::get('/general/setting/edit', 'edit')->name('general_setting.edit');
             Route::post('/general/setting/update', 'update')->name('general_setting.update');
-            Route::get('/general/setting/edit/{id}', 'edit')->name('general_setting.edit');
-            Route::post('/general/setting/destroy', 'destroy')->name('general_setting.destroy');
+            // Route::post('/general/setting/destroy', 'destroy')->name('general_setting.destroy');
         });
 
 
