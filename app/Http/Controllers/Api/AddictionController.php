@@ -39,6 +39,7 @@ class AddictionController extends Controller
 
     public function addiction_question_store ( Request $request ){
         $validator = Validator::make($request->all(), [
+            'addiction_id' => 'required',
             'answer' => 'required',
         ]);
 
@@ -47,9 +48,12 @@ class AddictionController extends Controller
         }
         $user = Auth::guard('sanctum')->user();
 
-        $question = addiction_recovery::where('user_id' , $user->id)->first();
+        addiction_recovery::where('user_id' , $user->id)->delete();
+        $question = new addiction_recovery;
+        $question->user_id =$user->id;
+        $question->addiction_id = $request->addiction_id;
         $question->answer = json_encode($request->answer);
-        $question->update();
+        $question->save();
         return $this->successMessage( 'Successfully Store Addiction Answer.');
 
     }
