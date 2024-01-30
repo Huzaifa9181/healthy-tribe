@@ -64,7 +64,7 @@ class AuthenticateController extends Controller
             'city' => 'required|string|max:255',
             'institution_attended' => 'required|string|max:255',
             'occupation' => 'required|string|max:255',
-            'phone_number' => 'required|integer',
+            'phone_number' => 'required',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => ['required', 'size:8' ],
         ]);
