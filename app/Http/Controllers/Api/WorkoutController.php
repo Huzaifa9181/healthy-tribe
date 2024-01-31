@@ -184,7 +184,7 @@ class WorkoutController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return $this->fail(422, "Invalid credentials", $validator->errors());
+            return $this->fail2(422, "Invalid credentials", $validator->errors());
         }
 
         $user = Auth::guard('sanctum')->user();
