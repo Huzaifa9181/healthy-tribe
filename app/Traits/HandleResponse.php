@@ -50,4 +50,19 @@ trait HandleResponse
             'error' => $errors,
         ], $status_code);
     }
+
+    public function fail2($code = 'internal_error', $msg = 'Internal Server Error', $errors = [], $status_code = Response::HTTP_INTERNAL_SERVER_ERROR): JsonResponse
+    {
+        // Concatenating all error messages into a single string
+        $StringErrors = implode(', ', $errors->all());
+
+        return $this->response([
+            'status' => false,
+            'status_code' => $status_code,
+            'message' => $msg,
+            'error_code' => $code,
+            'error' => $StringErrors,
+        ], $status_code);
+    }
+
 }

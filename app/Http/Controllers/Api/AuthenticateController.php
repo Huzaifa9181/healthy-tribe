@@ -32,7 +32,7 @@ class AuthenticateController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+            return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
         }
 
         $credentials = $request->only(['email', 'password']);
@@ -70,7 +70,7 @@ class AuthenticateController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+            return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
         }
     
         // Create a new user
@@ -109,7 +109,7 @@ class AuthenticateController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+            return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
         }
 
         $user = Auth::guard('sanctum')->user();
@@ -146,7 +146,7 @@ class AuthenticateController extends Controller
         ]);
         
         if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+            return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
         }
 
         $user = user::find($user->id);
@@ -214,7 +214,7 @@ class AuthenticateController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+            return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
         }
         
         // Generate a 5 digit pin
@@ -259,7 +259,7 @@ class AuthenticateController extends Controller
             ]);
         
             if ($validator->fails()) {
-                return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+                return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
             }
             $email = $request->email;
             $record = DB::table('password_reset')->where('email', $email)->first();
@@ -270,7 +270,7 @@ class AuthenticateController extends Controller
             ]);
         
             if ($validator->fails()) {
-                return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+                return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
             }
             $phone_number = $request->phone_number;
             $record = DB::table('password_reset')->where('phone_number', $phone_number)->first();
@@ -299,7 +299,7 @@ class AuthenticateController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+            return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
         }
 
         // Get the authenticated user
@@ -321,7 +321,7 @@ class AuthenticateController extends Controller
 
         // Check if validation fails
         if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+            return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
         }
 
         $twilio = new TwilioService();
@@ -351,7 +351,7 @@ class AuthenticateController extends Controller
         ]);
     
         if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
+            return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
         }
         $user = Auth::guard('sanctum')->user();
         $user = User::find($user->id);
