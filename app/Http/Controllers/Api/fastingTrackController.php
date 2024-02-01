@@ -90,8 +90,10 @@ class fastingTrackController extends Controller
         $user = Auth::guard('sanctum')->user();
 
         $fasting_track = fasting_track::where( 'user_id' ,$user->id)->latest()->first();
-        $fasting_track->feeling = $request->feeling ?? '';
-        $fasting_track->note = $request->feeling_note ?? '';
+        
+        $fasting_track->weight = $request->weight ?? '';
+        $fasting_track->weight_time = $request->weight_time ?? '';
+        $fasting_track->weight_date = $request->weight_date ?? '';
         $fasting_track->update();
 
         return $this->successMessage('Fasting Track Activity Saved.');
@@ -101,14 +103,13 @@ class fastingTrackController extends Controller
     public function fasting_mood_store (Request $request) {
         $user = Auth::guard('sanctum')->user();
 
+
         $fasting_track = fasting_track::where( 'user_id' ,$user->id)->latest()->first();
-        
-        $fasting_track->weight = $request->weight ?? '';
-        $fasting_track->weight_time = $request->weight_time ?? '';
-        $fasting_track->weight_date = $request->weight_date ?? '';
+        $fasting_track->feeling = $request->feeling ?? '';
+        $fasting_track->note = $request->feeling_note ?? '';
         $fasting_track->update();
 
-        return $this->successMessage('Fasting Track Activity Saved.');
+        return $this->successMessage('Fasting Track Mood Saved.');
     }
 
 
@@ -136,7 +137,7 @@ class fastingTrackController extends Controller
         $fasting_track->meal_id = $meal->id ?? '';
         $fasting_track->update();
 
-        return $this->successMessage('Fasting Track Activity Saved.');
+        return $this->successMessage('Fasting Track Meal Saved.');
     }
 
     public function fetchAllChallenges(){
