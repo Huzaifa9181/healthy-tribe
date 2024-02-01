@@ -31,6 +31,7 @@ class fastingTrackController extends Controller
         $validator = Validator::make($request->all(), [
             'start_time' => 'required',
             'description' => 'required',
+            'user_id' => 'required',
         ]);
     
         if ($validator->fails()) {
@@ -40,7 +41,7 @@ class fastingTrackController extends Controller
         $fasting_track = new fasting_track;
         $fasting_track->start_time = $request->start_time ?? '';
         $fasting_track->description = $request->description;
-        $fasting_track->user_id = $user->user_id;
+        $fasting_track->user_id = $request->user_id;
         $fasting_track->save();
 
         return $this->successMessage('Fasting Track Time Started.');
