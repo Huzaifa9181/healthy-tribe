@@ -26,38 +26,22 @@ class fastingTrackController extends Controller
         return $this->successWithData($latestArticle , 'Successfully Fetch Latest Article.');
     }
 
-    public function fasting_track_description (Request $request) {
-        $user = Auth::guard('sanctum')->user();
-        $validator = Validator::make($request->all(), [
-            'description' => 'required',
-            'user_id' => 'required',
-        ]);
-    
-        if ($validator->fails()) {
-            return $this->fail( 422 ,"Invalid credentials", $validator->errors());
-        }
-
-        $fasting_track = new fasting_track;
-        $fasting_track->description = $request->description;
-        $fasting_track->user_id = $user->user_id;
-        $fasting_track->save();
-
-        return $this->successMessage('Fasting Track Note Saved.');
-    }
-
     public function fasting_track_start (Request $request) {
         $user = Auth::guard('sanctum')->user();
         $validator = Validator::make($request->all(), [
             'start_time' => 'required',
+            'description' => 'required',
         ]);
     
         if ($validator->fails()) {
             return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
         
-        $fasting_track = fasting_track::where('user_id' , $user->id )->latest()->first();
+        $fasting_track = new fasting_track;
         $fasting_track->start_time = $request->start_time ?? '';
-        $fasting_track->update();
+        $fasting_track->description = $request->description;
+        $fasting_track->user_id = $user->user_id;
+        $fasting_track->save();
 
         return $this->successMessage('Fasting Track Time Started.');
     }
