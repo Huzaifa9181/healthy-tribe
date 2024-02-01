@@ -86,7 +86,7 @@ class fastingTrackController extends Controller
         return $this->successMessage('Fasting Track Activity Saved.');
     }
 
-    public function fasting_weight_store (Request $request) {
+    public function fasting_weight_store(Request $request) {
         $user = Auth::guard('sanctum')->user();
 
         $fasting_track = fasting_track::where( 'user_id' ,$user->id)->latest()->first();
