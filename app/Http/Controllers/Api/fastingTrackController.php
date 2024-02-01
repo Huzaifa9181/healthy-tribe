@@ -96,13 +96,12 @@ class fastingTrackController extends Controller
         $fasting_track->weight_date = $request->weight_date ?? '';
         $fasting_track->update();
 
-        return $this->successMessage('Fasting Track Activity Saved.');
+        return $this->successMessage('Fasting Track Weight Saved.');
     }
 
 
     public function fasting_mood_store (Request $request) {
         $user = Auth::guard('sanctum')->user();
-
 
         $fasting_track = fasting_track::where( 'user_id' ,$user->id)->latest()->first();
         $fasting_track->feeling = $request->feeling ?? '';
