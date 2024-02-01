@@ -61,7 +61,12 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::post('/fasting/track_start', 'fasting_track_start');
         Route::post('/fasting/track_end', 'fasting_track_end');
         Route::get('/fasting/milestone', 'milestone');
+        Route::post('/fasting/end/store', 'fasting_end_store');
         Route::post('/fasting/activity/store', 'fasting_activity_store');
+        Route::post('/fasting/Weight/store', 'fasting_weight_store');
+        Route::post('/fasting/meal/store', 'fasting_meal_store');
+        Route::post('/fasting/mood/store', 'fasting_mood_store');
+        Route::post('/fasting/achieve/store', 'fasting_achieve_store');
         Route::get('/fasting/calender/{id?}', 'calender');
         Route::get('/challenges', 'fetchAllChallenges');
         Route::get('/achieve/list', 'fetchAllachieve');

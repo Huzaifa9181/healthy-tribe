@@ -62,7 +62,57 @@ class fastingTrackController extends Controller
         return $this->successMessage('Fasting Track Time Started.');
     }
 
-    public function fasting_track_end (Request $request) {
+    public function fasting_end_store (Request $request) {
+        $user = Auth::guard('sanctum')->user();
+
+        $fasting_track = fasting_track::where( 'user_id' ,$user->id)->latest()->first();
+        $fasting_track->end_time = $request->end_time ?? '';
+        $fasting_track->update();
+
+        return $this->successMessage('Fasting Track Note Saved.');
+    }
+
+    public function fasting_activity_store (Request $request) {
+        $user = Auth::guard('sanctum')->user();
+
+        $fasting_track = fasting_track::where( 'user_id' ,$user->id)->latest()->first();
+        $fasting_track->end_time = $request->end_time ?? '';
+        
+        $fasting_track->activity_type = $request->activity_type ?? '';
+        $fasting_track->started_activity = $request->started_activity ?? '';
+        $fasting_track->finished_activity = $request->finished_activity ?? '';
+        $fasting_track->update();
+
+        return $this->successMessage('Fasting Track Activity Saved.');
+    }
+
+    public function fasting_weight_store (Request $request) {
+        $user = Auth::guard('sanctum')->user();
+
+        $fasting_track = fasting_track::where( 'user_id' ,$user->id)->latest()->first();
+        $fasting_track->feeling = $request->feeling ?? '';
+        $fasting_track->note = $request->feeling_note ?? '';
+        $fasting_track->update();
+
+        return $this->successMessage('Fasting Track Activity Saved.');
+    }
+
+
+    public function fasting_mood_store (Request $request) {
+        $user = Auth::guard('sanctum')->user();
+
+        $fasting_track = fasting_track::where( 'user_id' ,$user->id)->latest()->first();
+        
+        $fasting_track->weight = $request->weight ?? '';
+        $fasting_track->weight_time = $request->weight_time ?? '';
+        $fasting_track->weight_date = $request->weight_date ?? '';
+        $fasting_track->update();
+
+        return $this->successMessage('Fasting Track Activity Saved.');
+    }
+
+
+    public function fasting_meal_store (Request $request) {
         $user = Auth::guard('sanctum')->user();
         $meal = new Meal;
         if ($request->file('image')) {
@@ -77,23 +127,16 @@ class fastingTrackController extends Controller
             // Set the relative image path in the meal model
             $meal->image = 'assets/meal_images/' . $filename;
         }
-
         $meal->type = $request->meal_note ?? '';
         $meal->quantity = $request->quantity ?? '';
         $meal->meal_composition_id = $request->meal_composition_id ?? '';
         $meal->save();
 
-
         $fasting_track = fasting_track::where( 'user_id' ,$user->id)->latest()->first();
-        $fasting_track->end_time = $request->end_time ?? '';
-        $fasting_track->weight = $request->weight ?? '';
-        $fasting_track->activity_type = $request->activity_type ?? '';
-        $fasting_track->feeling = $request->feeling ?? '';
         $fasting_track->meal_id = $meal->id ?? '';
-        $fasting_track->note = $request->feeling_note ?? '';
         $fasting_track->update();
 
-        return $this->successMessage('Fasting Track Note Saved.');
+        return $this->successMessage('Fasting Track Activity Saved.');
     }
 
     public function fetchAllChallenges(){
