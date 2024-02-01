@@ -58,7 +58,6 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
     Route::controller(fastingTrackController::class)->group(function () {
         Route::get('/article', 'article');
         Route::post('/fasting/track_start', 'fasting_track_start');
-        Route::post('/fasting/track_end', 'fasting_track_end');
         Route::get('/fasting/milestone', 'milestone');
         Route::post('/fasting/end/store', 'fasting_end_store');
         Route::post('/fasting/activity/store', 'fasting_activity_store');

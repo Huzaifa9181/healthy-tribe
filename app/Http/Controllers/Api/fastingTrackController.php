@@ -53,7 +53,7 @@ class fastingTrackController extends Controller
         $fasting_track->end_time = $request->end_time ?? '';
         $fasting_track->update();
 
-        return $this->successMessage('Fasting Track Note Saved.');
+        return $this->successMessage('Fasting Track End Saved.');
     }
 
     public function fasting_activity_store (Request $request) {
