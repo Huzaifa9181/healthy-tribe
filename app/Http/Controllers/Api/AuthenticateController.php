@@ -25,32 +25,39 @@ class AuthenticateController extends Controller
     use HandleResponse;
     //
     public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|email|exists:users,email',
-            'password' => ['required'],
-        ]);
-    
-        if ($validator->fails()) {
-            return $this->fail2( 422 ,"Invalid credentials", $validator->errors());
-        }
+{
+    $validator = Validator::make($request->all(), [
+        'email' => 'required|email|exists:users,email',
+        'password' => ['required'],
+    ]);
 
-        $credentials = $request->only(['email', 'password']);
-        
-        if (Auth::attempt($credentials)) {
-            $user = Auth::user();
-
-            // Check if the user has the "staff" role
-            if ($user->role_id === 3) {
-                $profile_update = $user->profile_update;
-                $token = $user->createToken('MyApp')->plainTextToken;
-                $user= User::where('email' , $request->email)->update(['remember_token' => $token]);
-                return $this->successWithData(['token' => $token , 'profile' => $profile_update] , "access token" , 200 );
-            }
-        }
-
-        return $this->badRequestResponse( "Invalid credentials" );
+    if ($validator->fails()) {
+        return $this->fail2(422, "Invalid credentials", $validator->errors());
     }
+
+    $user = User::where('email', $request->email)->first();
+
+    // Check if the user exists and the password is correct
+    if ($user && Hash::check($request->password, $user->password)) {
+        // Check if the user has the "staff" role
+        if ($user->role_id === 3) {
+            $profile_update = $user->profile_update;
+            $token = $user->createToken('MyApp')->plainTextToken;
+            $user->update(['remember_token' => $token]);
+            return $this->successWithData(['token' => $token, 'profile' => $profile_update], "access token", 200);
+        }
+    } else {
+        // Provide a more specific error message
+        if (!$user) {
+            return $this->fail(422, "Invalid credentials", "Email not registered");
+        } else {
+            return $this->fail(422, "Invalid credentials", "Incorrect password");
+        }
+    }
+
+    return $this->badRequestResponse("Invalid credentials");
+}
+
 
     public function signup(Request $request)
     {
