@@ -129,7 +129,7 @@ class fastingTrackController extends Controller
         $challenges = Challenge::all()->map(function ($challenge) {
             if ($challenge->image) {
                 // Modify the image attribute to be a full URL
-                $challenge->image = URL::to('/') . 'public/' . $challenge->image;
+                $challenge->image = URL::to('/') . '/public/' . $challenge->image;
             }
             return $challenge;
         });
