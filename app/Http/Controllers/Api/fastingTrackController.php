@@ -15,6 +15,7 @@ use App\Traits\HandleResponse;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\URL;
 
 class fastingTrackController extends Controller
 {
@@ -125,8 +126,15 @@ class fastingTrackController extends Controller
     }
 
     public function fetchAllChallenges(){
-        $challenge = challenge::all();
-        return $this->successWithData($challenge , 'Successfully Fetch All Challenges.');
+        $challenges = Challenge::all()->map(function ($challenge) {
+            if ($challenge->image) {
+                // Modify the image attribute to be a full URL
+                $challenge->image = URL::to('/') . '/' . $challenge->image;
+            }
+            return $challenge;
+        });
+        
+        return $this->successWithData($challenges , 'Successfully Fetch All Challenges.');
     }
 
     public function milestone(){
