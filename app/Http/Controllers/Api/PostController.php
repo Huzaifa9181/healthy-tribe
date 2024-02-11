@@ -22,6 +22,8 @@ class PostController extends Controller
     public function getPost(Request $request){
         $post = post::latest();
 
+        return $this->successWithData($post, 'Successfully Fetch Data.');
+
     }
 
     public function post_store(Request $request){
@@ -29,7 +31,7 @@ class PostController extends Controller
             'caption' => 'required',
             'image' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
@@ -76,10 +78,10 @@ class PostController extends Controller
 
         $post = post::find($id);
         if($post->like > 0){
-            $post->decrement('like');         
+            $post->decrement('like');
         }
 
-        $post->update();        
+        $post->update();
         return $this->successWithData($post->like , 'Successfully Unlike Workout.');
     }
 
@@ -90,13 +92,13 @@ class PostController extends Controller
         ->get();
         return $this->successWithData($comments , 'Successfully Fetch All Comment For this Post.');
     }
-    
+
     public function post_comment_store(Request $request){
         $validator = Validator::make($request->all(), [
             'comment' => 'required',
             'post_id' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
@@ -117,7 +119,7 @@ class PostController extends Controller
         $validator = Validator::make($request->all(), [
             'story' => 'required',
         ]);
-    
+
         if ($validator->fails()) {
             return $this->fail( 422 ,"Invalid credentials", $validator->errors());
         }
@@ -132,7 +134,7 @@ class PostController extends Controller
                 $filename = time() . '.' . $image->getClientOriginalExtension();
                 // Store the file in the public folder
                 $image->move(public_path('assets/story'), $filename);
-    
+
                 // Set the relative image path in the meal model
                 $story->path = 'assets/story/' . $filename;
             }
@@ -182,7 +184,7 @@ class PostController extends Controller
             }else{
                 $story = story::find($id);
                 if($story->user_like > 0){
-                    $story->decrement('user_like');         
+                    $story->decrement('user_like');
                 }
                 $story->update();
                 $story_like = StoryLike::where('user_id' , $user->id)->where('story_id' , $id)->delete();

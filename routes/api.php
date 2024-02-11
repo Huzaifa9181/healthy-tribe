@@ -52,7 +52,7 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/FetchAllPlans', 'FetchAllPlans');
         Route::get('/videos', 'getVideos');
         Route::get('/videos/{id}', 'getSpecificVideos');
-        Route::post('workout/store', 'progress_workout_store');         
+        Route::post('workout/store', 'progress_workout_store');
     });
 
     Route::controller(fastingTrackController::class)->group(function () {
@@ -69,34 +69,35 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('/achieve/list', 'fetchAllachieve');
     });
 
-    
+
     Route::controller(ProgressController::class)->group(function () {
-        Route::get('/progress/fasting/track/{id?}', 'progress_fasting_track');       
-        Route::get('/progress/fasting/like/{id}', 'progress_fasting_track_like');       
-        Route::get('/progress/fasting/unlike/{id}', 'progress_fasting_track_unlike');       
-        Route::get('/progress/fasting/comments/{id}', 'progress_fasting_track_comment');       
-        Route::post('/progress/fasting/comments/store', 'progress_fasting_track_comment_store');       
+        Route::get('/progress/fasting/track/{id?}', 'progress_fasting_track');
+        Route::get('/progress/fasting/like/{id}', 'progress_fasting_track_like');
+        Route::get('/progress/fasting/unlike/{id}', 'progress_fasting_track_unlike');
+        Route::get('/progress/fasting/comments/{id}', 'progress_fasting_track_comment');
+        Route::post('/progress/fasting/comments/store', 'progress_fasting_track_comment_store');
         // workout
-        Route::get('/progress/workout/{id?}', 'progress_workout');       
-        Route::get('/progress/workout/like/{id}', 'progress_workout_like');       
-        Route::get('/progress/workout/unlike/{id}', 'progress_workout_unlike');       
-        Route::get('/progress/workout/comments/{id}', 'progress_workout_comment');       
-        Route::post('/progress/workout/comments/store', 'progress_workout_comment_store');     
-        Route::get('/progress/calender', 'ProgressCalender');     
-        Route::get('/progress/calender/like/{id?}', 'ProgressCalendeLike');     
-        Route::get('/progress/calender/unlike/{id?}', 'ProgressCalendeUnlike');     
-        
+        Route::get('/progress/workout/{id?}', 'progress_workout');
+        Route::get('/progress/workout/like/{id}', 'progress_workout_like');
+        Route::get('/progress/workout/unlike/{id}', 'progress_workout_unlike');
+        Route::get('/progress/workout/comments/{id}', 'progress_workout_comment');
+        Route::post('/progress/workout/comments/store', 'progress_workout_comment_store');
+        Route::get('/progress/calender', 'ProgressCalender');
+        Route::get('/progress/calender/like/{id?}', 'ProgressCalendeLike');
+        Route::get('/progress/calender/unlike/{id?}', 'ProgressCalendeUnlike');
+
     });
 
     Route::controller(PostController::class)->group(function () {
-        Route::post('/post/store', 'post_store');     
-        Route::get('/post/like/{id}', 'post_like');     
-        Route::get('/post/unlike/{id}', 'post_unlike');     
-        Route::get('/post/comments/{id}', 'post_comment');       
-        Route::post('/post/comments/store', 'post_comment_store');     
-        Route::post('/story/store', 'story_store');     
-        Route::get('/story/fetch/{id?}', 'story_fetch');     
-        Route::get('/story/{id?}/{status?}', 'story_like');     
+        Route::get('/post/fetch', 'getPost');
+        Route::post('/post/store', 'post_store');
+        Route::get('/post/like/{id}', 'post_like');
+        Route::get('/post/unlike/{id}', 'post_unlike');
+        Route::get('/post/comments/{id}', 'post_comment');
+        Route::post('/post/comments/store', 'post_comment_store');
+        Route::post('/story/store', 'story_store');
+        Route::get('/story/fetch/{id?}', 'story_fetch');
+        Route::get('/story/{id?}/{status?}', 'story_like');
     });
 
     Route::controller(SocialController::class)->group(function () {
@@ -127,13 +128,13 @@ Route::middleware([ApiAuthenticate::class])->prefix('user')->group(function () {
         Route::get('addiction/reset' , 'addiction_reset');
         Route::get('/addiction/management/calender/{id}', 'progress_addiction_calender');
         Route::post('/addiction/management/store', 'addiction_management_store');
-        Route::get('/addiction/management/like/{id?}', 'AddictionManagementLikeCalender');    
-        Route::get('/addiction/management/unlike/{id?}', 'AddictionManagementUnlikeCalender');    
-        Route::get('/addiction/management/comment/{id?}', 'progress_addiction_comment');    
-        Route::post('/addiction/management/comment/store', 'progress_addiction_comment_store');    
+        Route::get('/addiction/management/like/{id?}', 'AddictionManagementLikeCalender');
+        Route::get('/addiction/management/unlike/{id?}', 'AddictionManagementUnlikeCalender');
+        Route::get('/addiction/management/comment/{id?}', 'progress_addiction_comment');
+        Route::post('/addiction/management/comment/store', 'progress_addiction_comment_store');
     });
 
-    Route::controller(CommunityController::class)->group(function () { 
+    Route::controller(CommunityController::class)->group(function () {
         Route::get('community/list/{addiction_id?}' , 'comunity_list');
         Route::post('community/store' , 'community_store');
         Route::post('community/comment/store' , 'community_comment_store');
